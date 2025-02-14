@@ -18,7 +18,6 @@
   "private": true,
   "workspaces": [
     "contracts",
-    "subgraph",
     "web",
     "eslint-config",
     "prettier-config",

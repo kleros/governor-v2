@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.28;
+pragma solidity 0.8.24;
 
-import {IArbitrableV2, IArbitratorV2} from "./interfaces/IArbitrableV2.sol";
-import "./interfaces/IDisputeTemplateRegistry.sol";
+import {IArbitrableV2, IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
+import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
 
 /// @title KlerosGovernor for V2. Note that appeal functionality and evidence submission will be handled by the court.
 contract KlerosGovernor is IArbitrableV2 {
@@ -105,6 +105,7 @@ contract KlerosGovernor is IArbitrableV2 {
     /// @dev Constructor.
     /// @param _arbitrator The arbitrator of the contract.
     /// @param _arbitratorExtraData Extra data for the arbitrator.
+    /// @param _templateRegistry  Dispute Template registry address
     /// @param _templateData The dispute template data.
     /// @param _templateDataMappings The dispute template data mappings.
     /// @param _submissionBaseDeposit The base deposit required for submission.
@@ -114,6 +115,7 @@ contract KlerosGovernor is IArbitrableV2 {
     constructor(
         IArbitratorV2 _arbitrator,
         bytes memory _arbitratorExtraData,
+        IDisputeTemplateRegistry _templateRegistry,
         string memory _templateData,
         string memory _templateDataMappings,
         uint256 _submissionBaseDeposit,
@@ -131,7 +133,12 @@ contract KlerosGovernor is IArbitrableV2 {
         withdrawTimeout = _withdrawTimeout;
         sessions.push();
 
-        templateId = templateRegistry.setDisputeTemplate("", _templateData, _templateDataMappings);
+        templateRegistry = _templateRegistry;
+        templateId = IDisputeTemplateRegistry(templateRegistry).setDisputeTemplate(
+            "",
+            _templateData,
+            _templateDataMappings
+        );
     }
 
     // ************************************* //

@@ -22,6 +22,4 @@ envFile="$SCRIPT_DIR/../.env.${deployment}"
 [ -f "$envFile.public" ] && . $envFile.public
 [ -f "$envFile" ] && . $envFile
 
-"$SCRIPT_DIR/generateBuildInfo.sh"
-
 eval "$commands"

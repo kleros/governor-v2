@@ -1,12 +1,15 @@
 "use client";
 
-import { projectId, wagmiAdapter } from "@/web3Config";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { type ReactNode } from "react";
-import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
-import { createAppKit } from "@reown/appkit/react";
-import { isProductionDeployment, SUPPORTED_CHAINS } from "@/consts";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { arbitrum, arbitrumSepolia } from "@reown/appkit/networks";
+import { createAppKit } from "@reown/appkit/react";
+import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
+
+import { isProductionDeployment, SUPPORTED_CHAINS } from "@/consts";
+import { projectId, wagmiAdapter } from "@/web3Config";
 
 const queryClient = new QueryClient();
 

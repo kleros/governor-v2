@@ -5,6 +5,7 @@ import { useAppKit, useAppKitState } from "@reown/appkit/react";
 import { useAccount, useSwitchChain } from "wagmi";
 
 import { DEFAULT_CHAIN } from "@/consts";
+
 import Button from "../Button";
 
 export const SwitchChainButton: React.FC<{ className?: string }> = ({ className }) => {

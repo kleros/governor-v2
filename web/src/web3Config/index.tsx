@@ -1,7 +1,10 @@
 import { cookieStorage, createStorage } from "@wagmi/core";
+
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
-import { getTransports } from "./rpc";
+
 import { SUPPORTED_CHAINS } from "@/consts";
+
+import { getTransports } from "./rpc";
 
 export const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID;
 

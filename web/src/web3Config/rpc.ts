@@ -1,6 +1,7 @@
-import { DEFAULT_CHAIN, isProductionDeployment } from "@/consts";
 import { mainnet, arbitrum, arbitrumSepolia, type AppKitNetwork } from "@reown/appkit/networks";
 import { fallback, http, webSocket } from "wagmi";
+
+import { DEFAULT_CHAIN, isProductionDeployment } from "@/consts";
 
 const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
 if (!alchemyApiKey) {

@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import { headers } from "next/headers";
 
 import "./globals.css";
 
 import Web3Provider from "@/context/Web3Provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const openSans = Open_Sans({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -31,8 +26,8 @@ export default async function RootLayout({
   const cookies = headersObj.get("cookie");
 
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className={`${openSans.className} antialiased`}>
+      <body>
         <Web3Provider cookies={cookies}>{children}</Web3Provider>
       </body>
     </html>

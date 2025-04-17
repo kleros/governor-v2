@@ -3,15 +3,11 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useToggle } from "react-use";
 
-import { useAccount } from "wagmi";
-
 import ConnectWallet from "@/components/ConnectWallet";
 import LightButton from "@/components/LightButton";
 
 import HelpIcon from "@/assets/svgs/menu-icons/help.svg";
 import KlerosSolutionsIcon from "@/assets/svgs/menu-icons/kleros-solutions.svg";
-
-import { DEFAULT_CHAIN } from "@/consts";
 
 import DappList from "./navbar/DappList";
 import Help from "./navbar/Menu/Help";
@@ -21,8 +17,6 @@ import Logo from "./Logo";
 const Header: React.FC = () => {
   const [isDappListOpen, toggleIsDappListOpen] = useToggle(false);
   const [isHelpOpen, toggleIsHelpOpen] = useToggle(false);
-  const { isConnected, chainId } = useAccount();
-  const isDefaultChain = chainId === DEFAULT_CHAIN.id;
 
   return (
     <div
@@ -48,9 +42,7 @@ const Header: React.FC = () => {
         </div>
 
         <div className="flex gap-1 md:gap-2 ml-2">
-          <div {...{ isConnected, isDefaultChain }} onClick={isConnected && isDefaultChain ? undefined : undefined}>
-            <ConnectWallet />
-          </div>
+          <ConnectWallet />
           <LightButton
             text=""
             onClick={toggleIsHelpOpen}

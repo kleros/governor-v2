@@ -31,7 +31,9 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
           <Image
             alt={Icon}
             src={Icon}
-            className={clsx("size-12", isImgLoaded ? "block" : "none")}
+            width={48}
+            height={48}
+            className={clsx(isImgLoaded ? "block" : "none")}
             onLoad={() => setIsImgLoaded(true)}
           />
         </>

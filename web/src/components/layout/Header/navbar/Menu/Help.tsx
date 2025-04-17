@@ -19,12 +19,12 @@ const ITEMS = [
   {
     text: "Report a Bug",
     Icon: Bug,
-    url: "https://github.com/kleros/curate-v2/issues",
+    url: "https://github.com/kleros/governor-v2/issues",
   },
   {
     text: "DApp Guide",
     Icon: Guide,
-    url: "https://docs.kleros.io/products/curate",
+    url: "https://docs.kleros.io/products/governor",
   },
   {
     text: "Crypto Beginner's Guide",
@@ -56,6 +56,7 @@ const Help: React.FC<IHelp> = ({ isOpen, toggleIsHelpOpen }) => {
         onOpenChange={toggleIsHelpOpen}
         isDismissable
       >
+        <div className="size-full" role="menu"></div>
         {ITEMS.map(({ text, Icon, url }) => (
           <Link
             className={clsx(
@@ -65,6 +66,9 @@ const Help: React.FC<IHelp> = ({ isOpen, toggleIsHelpOpen }) => {
             href={url}
             key={text}
             target="_blank"
+            rel="noopener noreferrer"
+            role="menuitem"
+            aria-label={`${text} - opens in new tab`}
           >
             <Icon className="inline-block size-4 fill-klerosUIComponentsSecondaryPurple" />
             <small

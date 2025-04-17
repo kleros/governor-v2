@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "yarn start-devnet",
+    "build-netlify": "yarn generate && next build",
+    "build-devnet": "scripts/runEnv.sh devnet 'yarn generate && next build'",
     "start-local": "scripts/runEnv.sh local 'yarn generate && yarn dev'",
-    "start-devnet": "scripts/runEnv.sh devnet 'yarn generate:hooks && yarn dev'",
+    "start-devnet": "scripts/runEnv.sh devnet 'yarn generate && yarn dev'",
     "lint": "next lint --fix",
+    "generate": "yarn generate:hooks",
     "generate:hooks": "NODE_NO_WARNINGS=1 wagmi generate"
   },
   "prettier": "@kleros/governor-v2-prettier-config",

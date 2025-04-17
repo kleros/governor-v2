@@ -5,7 +5,11 @@ import { headers } from "next/headers";
 
 import "./globals.css";
 
+import "@kleros/ui-components-library/style.css";
+
 import Web3Provider from "@/context/Web3Provider";
+
+import Header from "@/components/layout/Header";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -26,9 +30,12 @@ export default async function RootLayout({
   const cookies = headersObj.get("cookie");
 
   return (
-    <html lang="en" className={`${openSans.className} antialiased`}>
-      <body>
-        <Web3Provider cookies={cookies}>{children}</Web3Provider>
+    <html lang="en" className={`${openSans.className} antialiased dark`}>
+      <body className="bg-klerosUIComponentsLightBackground">
+        <Web3Provider cookies={cookies}>
+          <Header />
+          <div className="size-full flex flex-col">{children}</div>
+        </Web3Provider>
       </body>
     </html>
   );

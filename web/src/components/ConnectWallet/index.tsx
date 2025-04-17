@@ -1,12 +1,14 @@
 "use client";
 import React, { useCallback } from "react";
 
+import { Button } from "@kleros/ui-components-library";
+
 import { useAppKit, useAppKitState } from "@reown/appkit/react";
 import { useAccount, useSwitchChain } from "wagmi";
 
 import { DEFAULT_CHAIN } from "@/consts";
 
-import Button from "../Button";
+import AccountDisplay from "./AccountDisplay";
 
 export const SwitchChainButton: React.FC<{ className?: string }> = ({ className }) => {
   // @ts-expect-error  isLoading is not documented, but exists in the type, might have changed to isPending
@@ -24,11 +26,12 @@ export const SwitchChainButton: React.FC<{ className?: string }> = ({ className 
   }, [switchChain]);
   return (
     <Button
+      text={`Switch to ${DEFAULT_CHAIN.name}`}
       {...{ className }}
-      // isLoading={isLoading}
-      disabled={isLoading}
-      onClick={handleSwitch}
-    >{`Switch to ${DEFAULT_CHAIN.name}`}</Button>
+      isLoading={isLoading}
+      isDisabled={isLoading}
+      onPress={handleSwitch}
+    />
   );
 };
 
@@ -38,12 +41,11 @@ const ConnectButton: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <Button
       {...{ className }}
-      disabled={isOpen}
-      // small
-      onClick={async () => open({ view: "Connect" })}
-    >
-      Connect
-    </Button>
+      isDisabled={isOpen}
+      small
+      text="Connect"
+      onPress={async () => open({ view: "Connect" })}
+    />
   );
 };
 
@@ -53,7 +55,7 @@ const ConnectWallet: React.FC<{ className?: string }> = ({ className }) => {
   if (isConnected) {
     if (chainId !== DEFAULT_CHAIN.id) {
       return <SwitchChainButton {...{ className }} />;
-    } else return <></>;
+    } else return <AccountDisplay />;
   } else return <ConnectButton {...{ className }} />;
 };
 

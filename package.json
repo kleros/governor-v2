@@ -45,5 +45,8 @@
   "alias": {
     "process": "process/browser.js",
     "buffer": "buffer"
+  },
+  "resolutions": {
+    "@types/react": "18.3.0"
   }
 }

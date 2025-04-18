@@ -1,24 +1,36 @@
 @import "tailwindcss";
+@import "../../../node_modules/@kleros/ui-components-library/dist/theme/theme.css";
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-blackLowOpacity: #00000080;
+  --color-whiteLowOpacitySubtle: #ffffff0d;
+  --color-whiteLowOpacityStrong: #ffffff26;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @keyframes slideInRight {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
   }
+
+  --animate-slide-in-right: slideInRight 0.5s ease-out;
+
+  @keyframes slideInLeft {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  --animate-slide-in-left: slideInLeft 0.5s ease-out;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .hover-short-transition {
+    transition: 0.1s;
+  }
 }

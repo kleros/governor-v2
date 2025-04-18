@@ -1,0 +1,90 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "ignorePatterns": [
+    "src/hooks/contracts/generated.ts"
+  ],
+  "rules": {
+    "max-len": [
+      "warn",
+      {
+        "code": 120
+      }
+    ],
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "next**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "{@reown/**,wagmi}",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/hooks/**,@/consts/**,@/context/**}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/queries/**,}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/src/**,}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/components/**,}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/assets/**,}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/consts,}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "./*",
+            "group": "sibling",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
+  }
+}

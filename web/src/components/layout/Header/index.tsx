@@ -19,9 +19,7 @@ const Header: React.FC = () => {
   const [isHelpOpen, toggleIsHelpOpen] = useToggle(false);
 
   return (
-    <div
-      className={clsx("bg-klerosUIComponentsLightBlue/65 backdrop-blur-md", "flex wrap sticky z-10 top-0 w-full px-6")}
-    >
+    <div className={clsx("bg-klerosUIComponentsLightBlue backdrop-blur-md", "flex wrap sticky z-30 top-0 w-full px-6")}>
       <div className="h-16 relative w-full flex items-center justify-between">
         <div className="flex gap-2">
           <div className="flex items-center">

@@ -3,10 +3,13 @@ import React from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import Identicon from "react-identicons";
+import { useToggle } from "react-use";
 import { isAddress } from "viem";
 import { normalize } from "viem/ens";
 
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
+
+import AccountDetails from "./AccountDetails";
 
 import { shortenAddress } from "@/utils/shortenAddress";
 
@@ -60,20 +63,25 @@ export const AddressOrName: React.FC<IAddressOrName> = ({ address: propAddress, 
 };
 
 const AccountDisplay: React.FC = () => {
+  const [isOpen, toggleIsOpen] = useToggle(false);
   return (
-    <div
-      className={clsx(
-        "bg-whiteLowOpacitySubtle transition ease-ease hover:bg-whiteLowOpacityStrong cursor-pointer rounded-[300px]",
-        "flex content-center justify-between items-center px-3"
-      )}
-    >
-      <div className="min-h-8 flex items-center w-fit gap-3">
-        <IdenticonOrAvatar size="24" />
-        <AddressOrName
-          className={clsx("text-white/80 text-sm hover:text-white", "transition-colors duration-200 cursor-pointer")}
-        />
+    <>
+      <div
+        className={clsx(
+          "bg-whiteLowOpacitySubtle transition ease-ease hover:bg-whiteLowOpacityStrong cursor-pointer rounded-[300px]",
+          "flex content-center justify-between items-center px-3"
+        )}
+        onClick={toggleIsOpen}
+      >
+        <div className="min-h-8 flex items-center w-fit gap-3">
+          <IdenticonOrAvatar size="24" />
+          <AddressOrName
+            className={clsx("text-white/80 text-sm hover:text-white", "transition-colors duration-200 cursor-pointer")}
+          />
+        </div>
       </div>
-    </div>
+      <AccountDetails {...{ isOpen, toggleIsOpen }} />
+    </>
   );
 };
 

@@ -47,7 +47,7 @@ const Help: React.FC<IHelp> = ({ isOpen, toggleIsHelpOpen }) => {
     <>
       <Modal
         className={clsx(
-          "overflow-y-auto max-h-[80vh] max-w-111 w-65 p-3 pr-6 mt-16 h-auto",
+          "overflow-y-auto max-h-[80vh] max-w-111 w-65 p-3 pr-6 mt-18 h-auto",
           "flex flex-col absolute top-0 right-0 left-auto",
           "shadow-default rounded-base border border-klerosUIComponentsStroke bg-klerosUIComponentsWhiteBackground",
           "animate-slide-in-left"

@@ -90,7 +90,7 @@ const DappList: React.FC<IDappList> = ({ isOpen, toggleIsDappListOpen }) => {
         "absolute  max-w-120",
         "flex flex-col items-center",
         "z-1 rounded-base border border-klerosUIComponentsStroke",
-        "mt-16 top-0 left-0 right-auto transform-none w-75 lg:w-120 h-auto md:max-h-[80vh]",
+        "mt-18 top-0 left-0 right-auto transform-none w-75 lg:w-120 h-auto md:max-h-[80vh]",
         "animate-slide-in-right"
       )}
       isOpen={isOpen}

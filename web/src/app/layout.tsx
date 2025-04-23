@@ -31,11 +31,11 @@ export default async function RootLayout({
   const cookies = headersObj.get("cookie");
 
   return (
-    <html lang="en" className={`${openSans.className} antialiased dark box-border`}>
-      <body className="bg-klerosUIComponentsLightBackground w-full h-screen flex flex-col">
+    <html lang="en" className={`${openSans.className} antialiased dark box-border size-full`}>
+      <body className="bg-klerosUIComponentsLightBackground size-full flex flex-col scrollbar">
         <Web3Provider cookies={cookies}>
           <Header />
-          <div className="size-full flex flex-col">{children}</div>
+          <div className="flex flex-1 flex-col">{children}</div>
           <Footer />
         </Web3Provider>
       </body>

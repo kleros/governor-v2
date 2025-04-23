@@ -60,7 +60,11 @@ const SocialMedia = () => (
 
 const Footer: React.FC = () => (
   <div
-    className={clsx("bg-klerosUIComponentsLightBlue", "h-16 w-full", "flex justify-between items-center gap-4 px-8")}
+    className={clsx(
+      "bg-klerosUIComponentsLightBlue",
+      "h-16 w-full",
+      "flex justify-between shrink-0 items-center gap-4 px-8"
+    )}
   >
     <SecuredByKleros />
     <SocialMedia />

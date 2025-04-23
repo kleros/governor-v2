@@ -1,21 +1,14 @@
 import clsx from "clsx";
 import Link from "next/link";
 
-import ETH from "@/assets/svgs/tokens/eth.svg";
+import { Governor } from "@/consts/governors";
 
 import { shortenAddress } from "@/utils/shortenAddress";
 
-interface IGovernorCard {
-  name: string;
-  Logo: React.FC<React.SVGProps<SVGElement>>;
-  address: string;
-  chainId: number;
-}
-
-const GovernorCard: React.FC<IGovernorCard> = ({ name, Logo, address }) => {
+const GovernorCard: React.FC<Governor> = ({ name, Logo, address, ChainIcon }) => {
   return (
     <Link
-      href={"/"}
+      href={`/governor/${address}`}
       className={clsx(
         "bg-klerosUIComponentsWhiteBackground relative",
         "h-26.75 w-95.5 flex rounded-base border border-klerosUIComponentsStroke",
@@ -43,7 +36,7 @@ const GovernorCard: React.FC<IGovernorCard> = ({ name, Logo, address }) => {
         <span className="text-klerosUIComponentsPrimaryText text-sm font-semibold">{name}</span>
         <div className="flex gap-2">
           <small className={clsx("text-klerosUIComponentsSecondaryText text-sm")}>{shortenAddress(address)}</small>
-          <ETH className="size-6" />
+          <ChainIcon className="size-6" />
         </div>
       </div>
     </Link>

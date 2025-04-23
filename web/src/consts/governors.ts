@@ -1,7 +1,7 @@
 import { gnosis, mainnet, type Chain } from "@reown/appkit/networks";
 
 import KlerosLogo from "@/assets/svgs/logos/kleros.svg";
-import PohLogo from "@/assets/svgs/logos/POH.svg";
+import PohLogo from "@/assets/svgs/logos/poh.svg";
 import ETH from "@/assets/svgs/tokens/eth.svg";
 import Gnosis from "@/assets/svgs/tokens/gnosis.svg";
 

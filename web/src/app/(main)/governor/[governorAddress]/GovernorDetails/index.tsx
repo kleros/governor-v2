@@ -1,9 +1,9 @@
 import clsx from "clsx";
 
-import { Governor } from "@/consts/governors";
-
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 import Snapshot from "@/assets/svgs/icons/snapshot.svg";
+
+import { Governor } from "@/consts/governors";
 
 import AddressLink from "./AddressLink";
 

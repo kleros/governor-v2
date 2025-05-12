@@ -1,6 +1,6 @@
-import { governors } from "@/consts/governors";
-
 import HeroImage from "@/assets/svgs/hero/header-darkmode.svg";
+
+import { governors } from "@/consts/governors";
 
 import GovernorCard from "./GovernorCard";
 export default function Home() {

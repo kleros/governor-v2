@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Button, Card, CustomAccordion, DraggableList } from "@kleros/ui-components-library";
 import { useToggle } from "react-use";
 
-import { List, lists } from "@/consts/mockLists";
-
 import DisplayCard from "@/components/ListDisplayCard";
 import Status from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
+
+import { List, lists } from "@/consts/mockLists";
 
 import AddTxnModal from "./AddTxnModal";
 

@@ -1,6 +1,6 @@
-import { lists } from "@/consts/mockLists";
-
 import Paper from "@/assets/svgs/icons/paper.svg";
+
+import { lists } from "@/consts/mockLists";
 
 import ListCard from "./ListCard";
 

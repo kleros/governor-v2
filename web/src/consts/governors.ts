@@ -23,14 +23,14 @@ export const governors: Governor[] = [
   },
   {
     name: "Kleros V2",
-    address: "0xbe8d95497E53aB41d5A45CC8def90d0e59b49f99",
+    address: "0xbe8d95497E53aB41d5A45CC8def90d0e59b49f98",
     Logo: KlerosLogo,
     chain: gnosis,
     ChainIcon: Gnosis,
   },
   {
     name: "Proof of Humanity  V1",
-    address: "0xbe8d95497E53aB41d5A45CC8def90d0e59b49f99",
+    address: "0xbe8d95497E53aB41d5A45CC8def90d0e59b49f97",
     Logo: PohLogo,
     chain: mainnet,
     ChainIcon: ETH,

@@ -5,13 +5,13 @@ import { useRef } from "react";
 import clsx from "clsx";
 import { useHoverDirty, useToggle } from "react-use";
 
-import { List } from "@/consts/mockLists";
-
 import { AddressOrName, IdenticonOrAvatar } from "@/components/ConnectWallet/AccountDisplay";
 import Status from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 import Search from "@/assets/svgs/icons/search.svg";
+
+import { List } from "@/consts/mockLists";
 
 import ExamineModal from "./ExamineModal";
 

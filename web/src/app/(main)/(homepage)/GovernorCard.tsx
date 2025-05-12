@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import Link from "next/link";
 
-import { Governor } from "@/consts/governors";
-
 import { shortenAddress } from "@/utils/shortenAddress";
+
+import { Governor } from "@/consts/governors";
 
 const GovernorCard: React.FC<Governor> = ({ name, Logo, address, ChainIcon }) => {
   return (

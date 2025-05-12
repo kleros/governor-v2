@@ -2,12 +2,12 @@ import { useState } from "react";
 
 import { Card, CustomAccordion, DraggableList } from "@kleros/ui-components-library";
 
-import { List } from "@/consts/mockLists";
-
 import { AddressOrName, IdenticonOrAvatar } from "@/components/ConnectWallet/AccountDisplay";
 import DisplayCard from "@/components/ListDisplayCard";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
+
+import { List } from "@/consts/mockLists";
 
 import Status from "../../../../../components/Status";
 

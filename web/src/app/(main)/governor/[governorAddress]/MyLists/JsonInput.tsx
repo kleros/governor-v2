@@ -49,7 +49,6 @@ function renderInputField(
   const type = mapSolidityToInputType(input.type);
   return (
     <>
-      {" "}
       {type === "string" && (
         <TextField
           key={path}
@@ -88,6 +87,7 @@ const JSONInput: React.FC = () => {
   const [abiInput, setAbiInput] = useState<string>("");
   const [functions, setFunctions] = useState<AbiFunction[]>([]);
   const [selectedFunction, setSelectedFunction] = useState<AbiFunction | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formValues, setFormValues] = useState<FormValues>({});
   const [error, setError] = useState<string>("");
 
@@ -106,12 +106,13 @@ const JSONInput: React.FC = () => {
       );
       setFunctions(functionItems);
       setSelectedFunction(null);
-    } catch (err) {
+    } catch {
       setError("Invalid ABI JSON");
       setFunctions([]);
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFieldChange = (name: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
@@ -133,7 +134,8 @@ const JSONInput: React.FC = () => {
             "bg-transparent px-2",
             "text-base text-klerosUIComponentsPrimaryText",
             "absolute top-0 left-6 -translate-y-1/2",
-            "before:w-full before:h-2/3 before:absolute before:left-0 before:right-0 before:bg-klerosUIComponentsWhiteBackground before:-z-1"
+            "before:w-full before:h-2/3 before:absolute before:left-0 before:right-0",
+            "before:bg-klerosUIComponentsWhiteBackground before:-z-1"
           )}
         >
           ABI

@@ -9,9 +9,9 @@ import { normalize } from "viem/ens";
 
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 
-import AccountDetails from "./AccountDetails";
-
 import { shortenAddress } from "@/utils/shortenAddress";
+
+import AccountDetails from "./AccountDetails";
 
 interface IIdenticonOrAvatar {
   size?: `${number}`;

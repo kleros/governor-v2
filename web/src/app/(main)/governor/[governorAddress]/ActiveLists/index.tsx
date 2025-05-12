@@ -1,3 +1,5 @@
+import { lists } from "@/consts/mockLists";
+
 import Paper from "@/assets/svgs/icons/paper.svg";
 
 import ListCard from "./ListCard";
@@ -10,8 +12,9 @@ const ActiveLists: React.FC = () => {
         <h2 className="text-base text-klerosUIComponentsPrimaryText">Active Lists</h2>
       </div>
       <div className="flex flex-wrap gap-4">
-        <ListCard />
-        <ListCard />
+        {lists.map((list) => (
+          <ListCard key={list.id} {...list} />
+        ))}
       </div>
     </div>
   );

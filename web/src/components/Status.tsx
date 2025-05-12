@@ -15,8 +15,8 @@ const Status: React.FC<{ status: ListStatus }> = ({ status }) => {
         "before:size-2 before:rounded-full",
         {
           "before:bg-klerosUIComponentsSuccess ": status === ListStatus.Executed,
-          "before:bg-klerosUIComponentsSecondaryText ": status === ListStatus.Submitted,
-          "before:bg-klerosUIComponentsPrimaryBlue ": status === ListStatus.Executed,
+          "before:bg-klerosUIComponentsSecondaryText ": status === ListStatus.Draft,
+          "before:bg-klerosUIComponentsPrimaryBlue ": status === ListStatus.Submitted,
         }
       )}
     >

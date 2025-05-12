@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
+
+import { Skeleton } from "@/components/Skeleton";
 
 interface IProduct {
   text: string;
@@ -27,7 +28,7 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
     >
       {typeof Icon === "string" ? (
         <>
-          {!isImgLoaded ? <Skeleton width={48} height={46} circle /> : null}
+          {!isImgLoaded ? <Skeleton className="w-14 h-11.5 rounded-full" /> : null}
           <Image
             alt={Icon}
             src={Icon}

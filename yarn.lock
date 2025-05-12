@@ -17211,15 +17211,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-loading-skeleton@npm:^3.5.0":
-  version: 3.5.0
-  resolution: "react-loading-skeleton@npm:3.5.0"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: e6a1385d07cbded44d82fa26ad9581274858a682ce728eb81a5c07816e9c1b74092ccb01dc0e79584a8d92d2f571dc6cd0481122d3817d19802e1af4f9961df5
-  languageName: node
-  linkType: hard
-
 "react-stately@npm:^3.37.0":
   version: 3.37.0
   resolution: "react-stately@npm:3.37.0"
@@ -20520,7 +20511,6 @@ __metadata:
     react: "npm:18.3.0"
     react-dom: "npm:18.3.0"
     react-identicons: "npm:^1.2.5"
-    react-loading-skeleton: "npm:^3.5.0"
     react-use: "npm:^17.6.0"
     tailwind: "npm:^4.0.0"
     tailwind-merge: "npm:^3.2.0"

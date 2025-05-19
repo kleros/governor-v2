@@ -1,3 +1,4 @@
+import HeroImageMobile from "@/assets/svgs/hero/header-darkmode-mobile.svg";
 import HeroImage from "@/assets/svgs/hero/header-darkmode.svg";
 
 import { governors } from "@/consts/governors";
@@ -7,7 +8,8 @@ export default function Home() {
   return (
     <>
       <div>
-        <HeroImage />
+        <HeroImage className="hidden sm:block" />
+        <HeroImageMobile className="sm:hidden" />
       </div>
       <div className="size-full px-33 pt-10.5 items-center flex flex-col">
         <div className="max-w-360 flex flex-col gap-6 ">

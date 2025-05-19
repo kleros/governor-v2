@@ -40,6 +40,7 @@ function renderInputField(
         key={path}
         className="w-full"
         label={name}
+        name={path}
         isRequired
         placeholder={`${name} (array of ${input.type.slice(0, -2)})}`}
         onChange={(val) => onChange(path, val.split(","))}
@@ -54,6 +55,7 @@ function renderInputField(
           key={path}
           label={name}
           isRequired
+          name={path}
           placeholder={input.type}
           className="w-full"
           onChange={(val) => onChange(path, val)}
@@ -63,6 +65,7 @@ function renderInputField(
         <BigNumberField
           key={path}
           label={name}
+          name={path}
           isRequired
           placeholder={input.type}
           className="w-full"
@@ -75,6 +78,7 @@ function renderInputField(
           small
           key={path}
           label={name}
+          name={path}
           className="w-full"
           onChange={(val) => onChange(path, val.toString())}
         />
@@ -148,6 +152,7 @@ const JSONInput: React.FC = () => {
       {functions.length > 0 && (
         <DropdownSelect
           isRequired
+          name="functionName"
           className={"mt-2 [&_button]:w-fit"}
           items={functions.map((fn, index) => {
             return { text: fn.name, itemValue: fn, id: index };
@@ -162,8 +167,8 @@ const JSONInput: React.FC = () => {
       {selectedFunction && (
         <div className="space-y-4">
           <h3 className="text-md  text-klerosUIComponentsPrimaryText font-medium">{selectedFunction.name}</h3>
-          {selectedFunction.inputs.map((input, index) =>
-            renderInputField(input, input.name || `arg${index}`, handleFieldChange)
+          {selectedFunction.inputs.map((input) =>
+            renderInputField(input, `function.${selectedFunction.name}.${input.name}`, handleFieldChange)
           )}
         </div>
       )}

@@ -13,7 +13,7 @@ const LightButton: React.FC<React.ComponentProps<typeof Button>> = ({ className,
     className={cn(
       "hover-short-transition bg-transparent p-2 !rounded-[7px]",
       "hover:bg-whiteLowOpacityStrong",
-      "[&>svg]:fill-white/75 [&>svg]:hover:fill-white [&>svg]:mr-0",
+      "[&>svg]:fill-white/75 hover:[&>svg]:fill-white [&>svg]:mr-0",
       className
     )}
   />

@@ -5,8 +5,6 @@ import { headers } from "next/headers";
 
 import "./globals.css";
 
-import "@kleros/ui-components-library/style.css";
-
 import Web3Provider from "@/context/Web3Provider";
 
 import Footer from "@/components/layout/Footer";

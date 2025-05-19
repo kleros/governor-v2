@@ -4,17 +4,14 @@ import Link from "next/link";
 
 import { useAccount, useDisconnect } from "wagmi";
 
-import { AddressOrName, IdenticonOrAvatar } from "./AccountDisplay";
+import { AddressOrName, ChainDisplay, IdenticonOrAvatar } from "./AccountDisplay";
 
 interface IAccountDetails {
   isOpen?: boolean;
   toggleIsOpen: () => void;
 }
 const AccountDetails: React.FC<IAccountDetails> = ({ isOpen, toggleIsOpen }) => {
-  const { address, chain } = useAccount();
   const { disconnect } = useDisconnect();
-
-  const explorerUrl = `${chain?.blockExplorers?.default.url}/address/${address}`;
 
   return (
     <Modal
@@ -29,28 +26,28 @@ const AccountDetails: React.FC<IAccountDetails> = ({ isOpen, toggleIsOpen }) => 
       onOpenChange={toggleIsOpen}
     >
       <IdenticonOrAvatar size="56" />
-      <Copiable copiableContent={address ?? ""} tooltipProps={{ small: true }}>
-        <Link href={explorerUrl} target="_blank" rel="noopener noreferrer">
-          <AddressOrName
-            className={clsx(
-              "text-klerosUIComponentsPrimaryText hover:underline hover:text-klerosUIComponentsPrimaryBlue",
-              "cursor-pointer"
-            )}
-          />
-        </Link>
-      </Copiable>
-      <small
-        className={clsx(
-          "text-klerosUIComponentsSuccess text-base relative",
-          "before:-left-4 before:top-1/2 before:-translate-y-1/2 before:absolute",
-          "before:size-2 before:bg-klerosUIComponentsSuccess before:rounded-full"
-        )}
-      >
-        {chain?.name}
-      </small>
+      <CopiableAddressDisplay />
+      <ChainDisplay />
       <Button variant="secondary" small text="Disconnect" onPress={() => disconnect()} />
     </Modal>
   );
 };
 
+export const CopiableAddressDisplay: React.FC = () => {
+  const { address, chain } = useAccount();
+
+  const explorerUrl = `${chain?.blockExplorers?.default.url}/address/${address}`;
+  return (
+    <Copiable copiableContent={address ?? ""} tooltipProps={{ small: true }}>
+      <Link href={explorerUrl} target="_blank" rel="noopener noreferrer">
+        <AddressOrName
+          className={clsx(
+            "text-klerosUIComponentsPrimaryText hover:underline hover:text-klerosUIComponentsPrimaryBlue",
+            "cursor-pointer"
+          )}
+        />
+      </Link>
+    </Copiable>
+  );
+};
 export default AccountDetails;

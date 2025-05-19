@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../../node_modules/@kleros/ui-components-library";
 @import "../../../node_modules/@kleros/ui-components-library/dist/assets/theme.css";
 
 @theme {
@@ -27,6 +28,17 @@
   }
 
   --animate-slide-in-left: slideInLeft 0.5s ease-out;
+
+  @keyframes slideInTop {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  --animate-slide-in-top: slideInTop 0.2s ease-out;
 }
 
 @layer components {

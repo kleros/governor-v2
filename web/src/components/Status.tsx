@@ -10,7 +10,7 @@ const Status: React.FC<{ status: ListStatus }> = ({ status }) => {
   return (
     <small
       className={clsx(
-        "text-sm text-klerosUIComponentsPrimaryText relative",
+        "text-sm text-klerosUIComponentsPrimaryText relative ml-4.5",
         "before:-left-4 before:top-1/2 before:-translate-y-1/2 before:absolute",
         "before:size-2 before:rounded-full",
         {

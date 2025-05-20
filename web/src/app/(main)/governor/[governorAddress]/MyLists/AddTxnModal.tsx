@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 import { BigNumberField, Button, Form, Modal, Radio, TextArea, TextField } from "@kleros/ui-components-library";
+import clsx from "clsx";
 
 import JSONInput from "./JsonInput";
 
@@ -14,10 +15,14 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ isOpen, toggleIsOpen }) => {
   const [inputType, setInputType] = useState(0);
   return (
     <Modal
-      className="w-150 h-auto max-h-186 overflow-scroll flex flex-col gap-6 items-center p-8"
+      className={clsx(
+        "max-md:w-full w-150 h-auto max-h-186",
+        "overflow-scroll flex flex-col gap-6 items-center px-4 py-6 md:p-8"
+      )}
       isOpen={isOpen}
       onOpenChange={toggleIsOpen}
       isDismissable
+      modalOverlayClassname={"px-6 max-md:w-full [&_.react-aria-Modal]:max-md:w-full"}
     >
       <h1 className="text-2xl text-klerosUIComponentsPrimaryText font-semibold" slot="title">
         Add tx to List
@@ -47,7 +52,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ isOpen, toggleIsOpen }) => {
         <BigNumberField name="value" label="Value" isRequired className="w-full" />
         <Radio
           isRequired
-          className="flex gap-6 mt-6.5"
+          className="flex gap-6 md:mt-6.5"
           orientation="horizontal"
           small
           aria-label="Input type"
@@ -58,7 +63,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ isOpen, toggleIsOpen }) => {
           onChange={(val) => setInputType(val === "data input" ? 0 : 1)}
         />
         {inputType === 0 ? (
-          <TextArea isRequired className="w-full h-36 mt-2 [&_textarea]:size-full" aria-label="Input area" />
+          <TextArea isRequired className="w-full h-36 mt-1 md:mt-2 [&_textarea]:size-full" aria-label="Input area" />
         ) : (
           <JSONInput />
         )}

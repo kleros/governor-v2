@@ -11,7 +11,7 @@ export default function Home() {
         <HeroImage className="hidden sm:block" />
         <HeroImageMobile className="sm:hidden" />
       </div>
-      <div className="size-full px-8 md:px-20 lg:px-33 py-10.5 items-center flex flex-col">
+      <div className="size-full px-7 md:px-20 lg:px-33 py-10.5 items-center flex flex-col">
         <div className="max-w-360 flex flex-col w-full gap-6 ">
           <h1 className="text-klerosUIComponentsPrimaryText w-full font-semibold text-2xl">Governors</h1>
           <div className="grid w-full place-content-center grid-cols-[repeat(auto-fit,minmax(300px,382px))] gap-4">

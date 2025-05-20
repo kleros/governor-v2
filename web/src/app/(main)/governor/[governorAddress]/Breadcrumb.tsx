@@ -9,8 +9,9 @@ const Breadcrumb: React.FC<{ name: string }> = ({ name }) => {
 
   return (
     <_Breadcrumb
+      className="[&_small]:text-sm [&_small]:font-normal"
       items={[
-        { text: <HomeIcon className="size-4" />, value: "/" },
+        { text: <HomeIcon className="size-3" />, value: "/" },
         { text: name, value: "" },
       ]}
       clickable

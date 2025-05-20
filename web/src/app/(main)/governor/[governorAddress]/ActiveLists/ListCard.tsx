@@ -23,12 +23,13 @@ const ListCard: React.FC<List> = (list) => {
     <div
       ref={cardRef}
       className={clsx(
-        "bg-klerosUIComponentsWhiteBackground",
-        "w-95.5 min-w-75.5 h-30.5 cursor-pointer relative rounded-base",
+        "bg-klerosUIComponentsWhiteBackground ",
+        "max-md:w-full w-95.5 max-md:h-fit h-30.5",
+        "cursor-pointer relative rounded-base box-border",
         "border border-klerosUIComponentsStroke hover-short-transition shadow-default "
       )}
     >
-      <div className="size-full  p-6 pr-4.5 flex flex-col gap-2 items-start z-1">
+      <div className="size-full p-4 md:p-6 pr-4.5 flex flex-col gap-2 items-start z-1">
         <div className="flex gap-2 items-center">
           <IdenticonOrAvatar size="16" address={list.submitter} />
           <AddressOrName className="text-sm text-klerosUIComponentsPrimaryText" address={list.submitter} />

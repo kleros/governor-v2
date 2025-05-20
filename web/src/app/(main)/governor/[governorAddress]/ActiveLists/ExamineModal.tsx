@@ -1,5 +1,6 @@
 "use client";
 import { Button, Modal } from "@kleros/ui-components-library";
+import clsx from "clsx";
 
 import { List } from "@/consts/mockLists";
 
@@ -14,7 +15,10 @@ interface IExamineModal {
 const ExamineModal: React.FC<IExamineModal> = ({ isOpen, toggleIsOpen, list }) => {
   return (
     <Modal
-      className="size-auto max-h-186 overflow-scroll w-max flex flex-col gap-8 items-center p-9"
+      className={clsx(
+        "size-auto max-h-186 overflow-scroll max-w-screen",
+        "flex flex-col gap-6 md:gap-8 items-center px-6 pt-4 pb-5 md:p-9"
+      )}
       isOpen={isOpen}
       onOpenChange={toggleIsOpen}
       isDismissable

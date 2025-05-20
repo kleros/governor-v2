@@ -23,8 +23,8 @@ export default function Page({ params }: { params: { governorAddress: string } }
   }
 
   return (
-    <div className="size-full flex justify-center px-33 pt-20 box-border">
-      <div className="max-w-360 w-full items-center flex flex-col gap-12 box-border">
+    <div className="size-full flex justify-center px-6 md:px-20 lg:px-33 py-20 box-border">
+      <div className="max-w-360 w-full items-center flex flex-col gap-8 md:gap-12 box-border">
         <div className="flex flex-col gap-4 items-start w-full">
           <Breadcrumb name={governor.name} />
           <GovernorDetailsCard {...governor} />

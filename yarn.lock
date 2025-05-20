@@ -20557,6 +20557,7 @@ __metadata:
     react-use: "npm:^17.6.0"
     tailwind: "npm:^4.0.0"
     tailwind-merge: "npm:^3.2.0"
+    tailwindcss-react-aria-components: "npm:^2.0.0"
     typescript: "npm:^5"
     viem: "npm:^2.23.6"
     wagmi: "npm:^2.14.12"

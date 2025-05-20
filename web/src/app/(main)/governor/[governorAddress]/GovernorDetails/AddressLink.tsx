@@ -17,7 +17,7 @@ const AddressLink: React.FC<{ address: Governor["address"]; chain: Governor["cha
         target="_blank"
         rel="noopener noreferrer"
         className={clsx(
-          "text-klerosUIComponentsSecondaryText cursor-pointer",
+          "text-sm text-klerosUIComponentsSecondaryText cursor-pointer",
           "hover:text-klerosUIComponentsPrimaryBlue hover:underline"
         )}
       >

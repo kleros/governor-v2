@@ -11,7 +11,7 @@ const GovernorCard: React.FC<Governor> = ({ name, Logo, address, ChainIcon }) =>
       href={`/governor/${address}`}
       className={clsx(
         "bg-klerosUIComponentsWhiteBackground relative",
-        "h-26.75 w-95.5 flex rounded-base border border-klerosUIComponentsStroke",
+        "h-26.75 min-w-75 max-w-95.5 flex rounded-base border border-klerosUIComponentsStroke",
         "hover:shadow-default hover:cursor-pointer hover:scale-101 transition ease-ease"
       )}
     >
@@ -22,7 +22,7 @@ const GovernorCard: React.FC<Governor> = ({ name, Logo, address, ChainIcon }) =>
           "before:-right-[38px] before:top-1/2 before:-translate-y-1/2 before:rounded-tl-md",
           "before:border-x-20 before:border-y-[53.5px] before:border-l-klerosUIComponentsWhiteBackground",
           "before:border-r-transparent before:border-t-transparent before:border-b-transparent",
-          "py-9.5 pl-6"
+          "pl-2 py-9.5 sm:pl-6"
         )}
       >
         <Logo />
@@ -30,7 +30,7 @@ const GovernorCard: React.FC<Governor> = ({ name, Logo, address, ChainIcon }) =>
       <div
         className={clsx(
           "w-[55%] bg-klerosUIComponentsMediumBlue rounded-base",
-          "flex flex-col gap-1.5 pr-4 py-9.5 pl-8.5 justify-center"
+          "flex flex-col gap-1.5 pr-2 sm:pr-4 py-9.5 pl-6.5 sm:pl-8.5 justify-center"
         )}
       >
         <span className="text-klerosUIComponentsPrimaryText text-sm font-semibold">{name}</span>

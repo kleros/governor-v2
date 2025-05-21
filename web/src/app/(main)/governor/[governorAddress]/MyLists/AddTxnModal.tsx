@@ -16,7 +16,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ isOpen, toggleIsOpen }) => {
   return (
     <Modal
       className={clsx(
-        "max-md:w-full w-150 h-auto max-h-186",
+        "w-full md:w-150 h-auto max-h-186",
         "overflow-scroll flex flex-col gap-6 items-center px-4 py-6 md:p-8"
       )}
       isOpen={isOpen}

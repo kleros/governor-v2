@@ -24,7 +24,7 @@ const ListCard: React.FC<List> = (list) => {
       ref={cardRef}
       className={clsx(
         "bg-klerosUIComponentsWhiteBackground ",
-        "max-md:w-full w-95.5 max-md:h-fit h-30.5",
+        "w-full md:w-95.5 h-fit md:h-30.5",
         "cursor-pointer relative rounded-base box-border",
         "border border-klerosUIComponentsStroke hover-short-transition shadow-default "
       )}

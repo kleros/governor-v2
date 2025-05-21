@@ -87,21 +87,24 @@ const DappList: React.FC<IDappList> = ({ isOpen, toggleIsDappListOpen }) => {
     <Modal
       className={clsx(
         "bg-klerosUIComponentsWhiteBackground shadow-default",
-        "absolute  max-w-120",
+        "absolute max-w-120",
         "flex flex-col items-center",
         "z-1 rounded-base border border-klerosUIComponentsStroke",
-        "mt-16 top-0 left-0 right-auto transform-none w-75 lg:w-120 h-auto md:max-h-[80vh]",
+        "top-0 left-0",
+        "mt-18 transform-none w-full md:w-75 lg:w-120 h-auto max-h-[50vh] md:max-h-[80vh]",
         "animate-slide-in-right"
       )}
       isOpen={isOpen}
       onOpenChange={toggleIsDappListOpen}
       isDismissable
     >
-      <h1 className="py-6 text-2xl font-semibold text-klerosUIComponentsPrimaryText">Kleros Solutions</h1>
+      <h1 className="py-6 text-2xl font-semibold text-klerosUIComponentsPrimaryText" slot="heading">
+        Kleros Solutions
+      </h1>
       <div
         className={clsx(
-          "grid grid-cols-[repeat(auto-fit,_minmax(100px,_1fr))] items-center gap-x-0.5 gap-y-2",
-          "max-w-120 min-w-75 w-75 lg:w-120",
+          "grid grid-cols-[repeat(auto-fit,_minmax(100px,_1fr))] place-items-center gap-x-0.5 gap-y-2",
+          "max-w-120 w-full md:min-w-75 md:w-75 lg:w-120",
           "overflow-y-auto pt-1 pb-4 px-4 lg:px-6 "
         )}
       >

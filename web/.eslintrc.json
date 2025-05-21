@@ -41,7 +41,7 @@
             "position": "after"
           },
           {
-            "pattern": "{@/hooks/**,@/consts/**,@/context/**}",
+            "pattern": "{@/hooks/**,@/context/**}",
             "group": "internal",
             "position": "after"
           },
@@ -66,7 +66,12 @@
             "position": "after"
           },
           {
-            "pattern": "{@/consts,}",
+            "pattern": "{@/utils/**,}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "{@/consts/**,}",
             "group": "internal",
             "position": "after"
           },

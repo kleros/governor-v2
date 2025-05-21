@@ -6,9 +6,9 @@ import { Button } from "@kleros/ui-components-library";
 import { useAppKit, useAppKitState } from "@reown/appkit/react";
 import { useAccount, useSwitchChain } from "wagmi";
 
-import { DEFAULT_CHAIN } from "@/consts";
-
 import AccountDisplay from "./AccountDisplay";
+
+import { DEFAULT_CHAIN } from "@/consts";
 
 export const SwitchChainButton: React.FC<{ className?: string }> = ({ className }) => {
   // @ts-expect-error  isLoading is not documented, but exists in the type, might have changed to isPending

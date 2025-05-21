@@ -13,7 +13,7 @@ import { List, lists } from "@/consts/mockLists";
 
 import AddTxnModal from "./AddTxnModal";
 
-export const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ transactions }) => {
+const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ transactions }) => {
   const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0]);
 
@@ -53,7 +53,7 @@ interface IAccordionTitle extends Pick<List, "createdOn" | "status"> {
   numberOfTxns: number;
 }
 
-export const AccordionTitle: React.FC<IAccordionTitle> = ({ createdOn, status, numberOfTxns }) => {
+const AccordionTitle: React.FC<IAccordionTitle> = ({ createdOn, status, numberOfTxns }) => {
   return (
     <div className="flex flex-wrap gap-2 md:gap-8 items-center">
       <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">List</h3>

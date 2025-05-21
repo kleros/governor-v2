@@ -11,7 +11,7 @@ import Calendar from "@/assets/svgs/icons/calendar.svg";
 
 import { List } from "@/consts/mockLists";
 
-export const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ transactions }) => {
+const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ transactions }) => {
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0]);
 
   return (
@@ -47,7 +47,7 @@ interface IAccordionTitle extends Pick<List, "submitter" | "createdOn" | "status
   numberOfTxns: number;
 }
 
-export const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, createdOn, numberOfTxns, status }) => {
+const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, createdOn, numberOfTxns, status }) => {
   return (
     <div className="flex flex-wrap gap-2 md:gap-8 items-center">
       <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">List</h3>

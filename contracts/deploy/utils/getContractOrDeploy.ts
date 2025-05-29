@@ -15,5 +15,6 @@ export const getContractOrDeploy = async (
   } else {
     console.log(`contract ${contractName} already deployed`);
   }
+  // @ts-expect-error
   return contract;
 };

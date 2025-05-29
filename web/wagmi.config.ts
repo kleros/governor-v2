@@ -1,10 +1,9 @@
 import { readdir, readFile } from "fs/promises";
 import { parse, join } from "path";
 
-import { type Chain } from "@wagmi/chains";
 import { type Config, type ContractConfig, defineConfig } from "@wagmi/cli";
-import { react, actions } from "@wagmi/cli/plugins";
 import dotenv from "dotenv";
+import { type Chain } from "wagmi/chains";
 
 dotenv.config();
 
@@ -64,7 +63,10 @@ const getConfig = async (): Promise<Config> => {
   return {
     out: "src/hooks/contracts/generated.ts",
     contracts: [...deploymentContracts],
-    plugins: [react(), actions()],
+    // we create hooks manually in hooks/useGovernor.ts to allow overriding `address` property
+    // reference : https://github.com/wevm/wagmi/discussions/4241
+    // un-comment to generate react hooks
+    // plugins: [react(), actions()],
   };
 };
 

@@ -23,7 +23,6 @@ contract KlerosGovernor is IArbitrableV2 {
         uint256[] submittedLists; // Tracks all lists that were submitted in a session in the form submittedLists[submissionID].
         uint256 sumDeposit; // Sum of all submission deposits in a session (minus arbitration fees). This is used to calculate the reward.
         Status status; // Status of a session.
-        mapping(bytes32 listHash => bool) alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[listHash].
         uint256 durationOffset; // Time in seconds that prolongs the submission period after the first submission, to give other submitters time to react.
     }
 
@@ -59,7 +58,7 @@ contract KlerosGovernor is IArbitrableV2 {
 
     Submission[] public submissions; // Stores all created transaction lists. submissions[_listID].
     Session[] public sessions; // Stores all submitting sessions. sessions[_session].
-
+    mapping(uint256 sessionIndex => mapping(bytes32 listHash => bool)) alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[listHash].
     // ************************************* //
     // *        Function Modifiers         * //
     // ************************************* //
@@ -233,8 +232,8 @@ contract KlerosGovernor is IArbitrableV2 {
             currentTxHash = keccak256(abi.encodePacked(transaction.target, transaction.value, transaction.data));
             listHash = keccak256(abi.encodePacked(currentTxHash, listHash));
         }
-        require(!session.alreadySubmitted[listHash], "List already submitted");
-        session.alreadySubmitted[listHash] = true;
+        require(!alreadySubmitted[sessions.length - 1][listHash], "List already submitted");
+        alreadySubmitted[sessions.length - 1][listHash] = true;
         submission.listHash = listHash;
         submission.submissionTime = block.timestamp;
         session.sumDeposit += submission.deposit;
@@ -262,7 +261,7 @@ contract KlerosGovernor is IArbitrableV2 {
         require(submission.submitter == msg.sender, "Only submitter can withdraw");
         require(block.timestamp - submission.submissionTime <= withdrawTimeout, "Withdrawing time has passed.");
         session.submittedLists[_submissionID] = session.submittedLists[session.submittedLists.length - 1];
-        session.alreadySubmitted[_listHash] = false;
+        alreadySubmitted[sessions.length - 1][_listHash] = false;
         session.submittedLists.pop();
         session.sumDeposit -= submission.deposit;
         reservedETH -= submission.deposit;
@@ -406,5 +405,11 @@ contract KlerosGovernor is IArbitrableV2 {
     /// @return The number of the ongoing session.
     function getCurrentSessionNumber() external view returns (uint256) {
         return sessions.length - 1;
+    }
+
+    /// @dev Gets the session from the session index.
+    /// @return _session The session info.
+    function getSession(uint256 _sessionIndex) external view returns (Session memory _session) {
+        _session = sessions[_sessionIndex];
     }
 }

@@ -2,7 +2,7 @@ import { readdir, readFile } from "fs/promises";
 import { parse, join } from "path";
 import { ContractConfig } from "@wagmi/cli";
 import { Abi } from "viem";
-import { Chain } from "@wagmi/chains";
+import { Chain } from "wagmi/chains";
 
 type ArtifactPartial = {
   abi: Abi;

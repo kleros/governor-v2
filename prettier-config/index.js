@@ -13,6 +13,7 @@ module.exports = {
     {
       files: ["*.sol"],
       options: {
+        parser: "slang",
         printWidth: 120,
         tabWidth: 4,
         useTabs: false,
@@ -22,4 +23,5 @@ module.exports = {
       },
     },
   ],
+  plugins: ["prettier-plugin-solidity"],
 };

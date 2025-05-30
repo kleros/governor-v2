@@ -1,9 +1,9 @@
 import { Address } from "viem";
 
-import { useReadGetCurrentSessionNumber, useReadGetSession } from "./useGovernor";
-
 import { DEFAULT_CHAIN } from "@/consts";
 import { isUndefined } from "@/utils";
+
+import { useReadGetCurrentSessionNumber, useReadGetSession } from "./useGovernor";
 
 export const useFetchSession = (address: Address) => {
   const { data: currentSessionNumber } = useReadGetCurrentSessionNumber({
@@ -14,7 +14,7 @@ export const useFetchSession = (address: Address) => {
     address,
   });
 
-  const { data: session } = useReadGetSession({
+  return useReadGetSession({
     query: {
       refetchInterval: 5000,
       enabled: !isUndefined(currentSessionNumber),
@@ -23,6 +23,4 @@ export const useFetchSession = (address: Address) => {
     args: [currentSessionNumber ?? BigInt(0)],
     address,
   });
-
-  return session;
 };

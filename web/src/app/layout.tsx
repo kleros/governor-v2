@@ -5,6 +5,8 @@ import { headers } from "next/headers";
 
 import "./globals.css";
 
+import { ToastContainer } from "react-toastify";
+
 import Web3Provider from "@/context/Web3Provider";
 
 import Footer from "@/components/layout/Footer";
@@ -32,6 +34,7 @@ export default async function RootLayout({
     <html lang="en" className={`${openSans.className} antialiased dark box-border size-full`}>
       <body className="bg-klerosUIComponentsLightBackground size-full flex flex-col scrollbar">
         <Web3Provider cookies={cookies}>
+          <ToastContainer />
           <Header />
           <div className="flex flex-1 flex-col">{children}</div>
           <Footer />

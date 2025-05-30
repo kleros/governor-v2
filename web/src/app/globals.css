@@ -3,6 +3,14 @@
 @plugin "tailwindcss-react-aria-components";
 @source "../../../node_modules/@kleros/ui-components-library";
 
+:root {
+  --toastify-color-info: var(--klerosUIComponentsPrimaryBlue);
+
+  --toastify-color-success: var(--klerosUIComponentsSuccess);
+  --toastify-color-warning: var(--klerosUIComponentsWarning);
+  --toastify-color-error: var(--klerosUIComponentsError);
+}
+
 @theme {
   --color-blackLowOpacity: #00000080;
   --color-whiteLowOpacitySubtle: #ffffff0d;

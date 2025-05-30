@@ -16,8 +16,8 @@
   "dependencies": {
     "@kleros/kleros-v2-contracts": "^0.7.0",
     "@kleros/ui-components-library": "^3.3.4",
-    "@reown/appkit": "^1.6.9",
-    "@reown/appkit-adapter-wagmi": "^1.6.9",
+    "@reown/appkit": "^1.7.7",
+    "@reown/appkit-adapter-wagmi": "^1.7.7",
     "@tailwindcss/postcss": "^4.1.7",
     "@tanstack/react-query": "^5.67.1",
     "@wagmi/cli": "^2.2.0",
@@ -26,8 +26,10 @@
     "next": "14.2.27",
     "postcss": "^8.5.3",
     "react": "18.3.0",
+    "react-countdown": "^2.3.6",
     "react-dom": "18.3.0",
     "react-identicons": "^1.2.5",
+    "react-toastify": "^11.0.5",
     "react-use": "^17.6.0",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^3.2.0",
@@ -45,6 +47,7 @@
     "@types/react-dom": "18.3.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.8",
+    "eslint-config-prettier": "^10.1.5",
     "typescript": "^5.8.3"
   }
 }

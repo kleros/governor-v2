@@ -1,6 +1,6 @@
 import { Address } from "viem";
 
-import { gnosis, mainnet, type Chain } from "@reown/appkit/networks";
+import { arbitrumSepolia, gnosis, mainnet, type Chain } from "@reown/appkit/networks";
 
 import KlerosLogo from "@/assets/svgs/logos/kleros.svg";
 import PohLogo from "@/assets/svgs/logos/poh.svg";
@@ -19,9 +19,9 @@ export type Governor = {
 export const governors: Governor[] = [
   {
     name: "Kleros V1",
-    address: "0x32a67598841F773e23B5d81822DD697940E4E011",
+    address: "0x9F4d1F4EDc2EFa6a5E38F8137B6B48502ED02310",
     Logo: KlerosLogo,
-    chain: mainnet,
+    chain: arbitrumSepolia,
     ChainIcon: ETH,
     snapshotSlug: "kleros",
   },

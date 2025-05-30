@@ -1,4 +1,4 @@
-import { createUseReadContract } from "wagmi/codegen";
+import { createUseReadContract, createUseSimulateContract, createUseWriteContract } from "wagmi/codegen";
 
 import { klerosGovernorAbi } from "./contracts/generated";
 export const useReadLastApprovalTime = createUseReadContract({
@@ -10,3 +10,16 @@ export const useReadGetCurrentSessionNumber = createUseReadContract({
   functionName: "getCurrentSessionNumber",
 });
 export const useReadGetSession = createUseReadContract({ abi: klerosGovernorAbi, functionName: "getSession" });
+export const useReadSubmissionTimeout = createUseReadContract({
+  abi: klerosGovernorAbi,
+  functionName: "submissionTimeout",
+});
+
+export const useSimulateExecuteSubmissions = createUseSimulateContract({
+  abi: klerosGovernorAbi,
+  functionName: "executeSubmissions",
+});
+export const useWriteExecuteSubmissions = createUseWriteContract({
+  abi: klerosGovernorAbi,
+  functionName: "executeSubmissions",
+});

@@ -1,39 +1,88 @@
 "use client";
 
-import { useReadLastApprovalTime } from "@/hooks/useGovernor";
+import { useState } from "react";
 
+import { Button } from "@kleros/ui-components-library";
+
+import { usePublicClient } from "wagmi";
+
+import { formatDate, isUndefined } from "@/utils";
+
+import { useFetchSession } from "@/hooks/useFetchSession";
+import { useSimulateExecuteSubmissions, useWriteExecuteSubmissions } from "@/hooks/useGovernor";
+import { useSessionEnd } from "@/hooks/useSessionEnd";
+import { useSessionStart } from "@/hooks/useSessionStart";
+
+import { EnsureChain } from "@/components/EnsureChain";
 import { Skeleton } from "@/components/Skeleton";
+import WrapWithCountdown from "@/components/WrapWithCountdown";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 
+import { wrapWithToast } from "@/utils/wrapWithToast";
+
 import { Governor } from "@/consts/governors";
 
-import { DEFAULT_CHAIN } from "@/consts";
-import { formatDate } from "@/utils";
-
 const SessionInfo: React.FC<{ address: Governor["address"] }> = ({ address }) => {
-  const { data: lastApprovalTime } = useReadLastApprovalTime({
+  const [isSending, setIsSending] = useState(false);
+  const publicClient = usePublicClient();
+  const { data: sessionStart } = useSessionStart(address);
+  const sessionEnd = useSessionEnd(address);
+  const { data: session } = useFetchSession(address);
+
+  const buttonText = () => {
+    if (isUndefined(session)) return "";
+    if (session.submittedLists.length > 1) return "Raise Dispute";
+    else if (session.submittedLists.length === 0) return "New Session";
+    else return "Execute Submissions";
+  };
+
+  const {
+    data: executeConfig,
+    isLoading: isLoadingConfig,
+    isError,
+    refetch,
+  } = useSimulateExecuteSubmissions({
     query: {
-      staleTime: 5000,
+      enabled: !isUndefined(sessionEnd),
     },
     address,
-    chainId: DEFAULT_CHAIN.id,
   });
 
+  const { writeContractAsync: executeSubmissions } = useWriteExecuteSubmissions();
   return (
-    <div className="flex gap-2 items-start md:items-center">
-      <Calendar className="size-4 shrink-0" />
-      <small className="text-sm text-klerosUIComponentsSecondaryText">
-        Session: Votes approved before{" "}
-        <span className="text-sm text-klerosUIComponentsSecondaryText">
-          {lastApprovalTime ? (
-            `${formatDate(Number(lastApprovalTime), true)}`
-          ) : (
-            <Skeleton className="w-10 h-3 inline-block" />
-          )}
-        </span>
-      </small>
-    </div>
+    <>
+      <div className="flex gap-2 items-start md:items-center">
+        <Calendar className="size-4 shrink-0" />
+        {sessionStart ? (
+          <small className="text-sm text-klerosUIComponentsSecondaryText">
+            Session: Votes approved before {formatDate(Number(sessionStart), true)}
+          </small>
+        ) : (
+          <Skeleton className="ml-2 w-30 h-4 inline-block" />
+        )}
+      </div>
+      {sessionEnd ? (
+        <WrapWithCountdown date={Number(sessionEnd) * 1000} text="Session ends in $$$" onComplete={refetch}>
+          <EnsureChain>
+            <Button
+              text={buttonText()}
+              small
+              isDisabled={isLoadingConfig || isSending || isError}
+              isLoading={isLoadingConfig || isSending}
+              onPress={async () => {
+                if (publicClient && executeConfig?.request) {
+                  setIsSending(true);
+                  wrapWithToast(async () => await executeSubmissions(executeConfig.request), publicClient).finally(() =>
+                    setIsSending(false)
+                  );
+                }
+              }}
+            />
+          </EnsureChain>
+        </WrapWithCountdown>
+      ) : null}
+    </>
   );
 };
 

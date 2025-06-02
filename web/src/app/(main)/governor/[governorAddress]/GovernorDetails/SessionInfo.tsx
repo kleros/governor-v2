@@ -6,8 +6,6 @@ import { Button } from "@kleros/ui-components-library";
 
 import { usePublicClient } from "wagmi";
 
-import { formatDate, isUndefined } from "@/utils";
-
 import { useFetchSession } from "@/hooks/useFetchSession";
 import { useSimulateExecuteSubmissions, useWriteExecuteSubmissions } from "@/hooks/useGovernor";
 import { useSessionEnd } from "@/hooks/useSessionEnd";
@@ -19,6 +17,7 @@ import WrapWithCountdown from "@/components/WrapWithCountdown";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 
+import { formatDate, isUndefined } from "@/utils";
 import { wrapWithToast } from "@/utils/wrapWithToast";
 
 import { Governor } from "@/consts/governors";

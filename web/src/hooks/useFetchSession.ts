@@ -1,7 +1,8 @@
 import { Address } from "viem";
 
-import { DEFAULT_CHAIN } from "@/consts";
 import { isUndefined } from "@/utils";
+
+import { DEFAULT_CHAIN } from "@/consts";
 
 import { useReadGetCurrentSessionNumber, useReadGetSession } from "./useGovernor";
 

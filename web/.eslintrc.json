@@ -36,42 +36,37 @@
             "position": "before"
           },
           {
-            "pattern": "{@reown/**,wagmi}",
+            "pattern": "{@reown{,/**},wagmi}",
             "group": "external",
             "position": "after"
           },
           {
-            "pattern": "{@/hooks/**,@/context/**}",
+            "pattern": "{@/hooks{,/**},@/context{,/**}}",
             "group": "internal",
             "position": "after"
           },
           {
-            "pattern": "{@/queries/**,}",
+            "pattern": "@/components{,/**}",
             "group": "internal",
             "position": "after"
           },
           {
-            "pattern": "{@/src/**,}",
+            "pattern": "@/assets{,/**}",
             "group": "internal",
             "position": "after"
           },
           {
-            "pattern": "{@/components/**,}",
+            "pattern": "@/utils{,/**}",
             "group": "internal",
             "position": "after"
           },
           {
-            "pattern": "{@/assets/**,}",
+            "pattern": "@/web3Config{,/**}",
             "group": "internal",
             "position": "after"
           },
           {
-            "pattern": "{@/utils/**,}",
-            "group": "internal",
-            "position": "after"
-          },
-          {
-            "pattern": "{@/consts/**,}",
+            "pattern": "@/consts{,/**}",
             "group": "internal",
             "position": "after"
           },

@@ -4,22 +4,10 @@ import { BigNumberField, Checkbox, DropdownSelect, TextArea, TextField } from "@
 import clsx from "clsx";
 import type { Abi, AbiFunction } from "viem";
 
-type FormValues = Record<string, string | number | string[]>;
+import { getDefaultPlaceholder, mapSolidityToInputType } from "@/utils/txnBuilder/format";
+import { isJSONParsable, TupleInput } from "@/utils/txnBuilder/parsing";
 
-type TupleInput = AbiFunction["inputs"][number] & { components?: AbiFunction["inputs"] };
-
-const mapSolidityToInputType = (type: string): string => {
-  if (type.startsWith("uint") || type.startsWith("int")) return "number";
-  if (type === "address" || type === "string" || type.includes("bytes")) return "string";
-  if (type === "bool") return "boolean";
-  return "string";
-};
-
-function renderInputField(
-  input: TupleInput,
-  path: string,
-  onChange: (name: string, value: string | number | string[]) => void
-): JSX.Element {
+function renderInputField(input: TupleInput, path: string): JSX.Element {
   const name = input.name || path;
 
   if (input.type === "tuple" && input.components) {
@@ -29,7 +17,7 @@ function renderInputField(
         className={clsx("p-2 border border-klerosUIComponentsStroke rounded mb-2", "flex flex-col gap-4")}
       >
         <legend className="text-klerosUIComponentsPrimaryText text-sm font-semibold">{name} (tuple)</legend>
-        {input.components.map((component) => renderInputField(component, `${path}.${component.name}`, onChange))}
+        {input.components.map((component) => renderInputField(component, `${path}.${component.name}`))}
       </fieldset>
     );
   }
@@ -39,11 +27,14 @@ function renderInputField(
       <TextField
         key={path}
         className="w-full"
-        label={name}
+        label={`${name} (${input.type})`}
         name={path}
         isRequired
-        placeholder={`${name} (array of ${input.type.slice(0, -2)})}`}
-        onChange={(val) => onChange(path, val.split(","))}
+        placeholder={getDefaultPlaceholder(input.type)}
+        validate={(val) => {
+          if (isJSONParsable(val)) return true;
+          return "Not parsable";
+        }}
       />
     );
   }
@@ -53,35 +44,25 @@ function renderInputField(
       {type === "string" && (
         <TextField
           key={path}
-          label={name}
+          label={`${name} (${input.type})`}
           isRequired
           name={path}
-          placeholder={input.type}
+          placeholder={getDefaultPlaceholder(input.type)}
           className="w-full"
-          onChange={(val) => onChange(path, val)}
         />
       )}
       {type === "number" && (
         <BigNumberField
           key={path}
-          label={name}
+          label={`${name} (${input.type})`}
           name={path}
           isRequired
-          placeholder={input.type}
+          placeholder={getDefaultPlaceholder(input.type)}
           className="w-full"
-          onChange={(val) => onChange(path, val.toString())}
         />
       )}
       {type === "boolean" && (
-        <Checkbox
-          isRequired
-          small
-          key={path}
-          label={name}
-          name={path}
-          className="w-full"
-          onChange={(val) => onChange(path, val.toString())}
-        />
+        <Checkbox isRequired small key={path} label={name} name={path} defaultSelected className="w-full" />
       )}
     </>
   );
@@ -91,8 +72,7 @@ const JSONInput: React.FC = () => {
   const [abiInput, setAbiInput] = useState<string>("");
   const [functions, setFunctions] = useState<AbiFunction[]>([]);
   const [selectedFunction, setSelectedFunction] = useState<AbiFunction | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [formValues, setFormValues] = useState<FormValues>({});
+
   const [error, setError] = useState<string>("");
 
   const handleAbiChange = (val: string) => {
@@ -116,16 +96,11 @@ const JSONInput: React.FC = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleFieldChange = (name: string, value: any) => {
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-  };
-
   return (
     <div className="flex flex-col gap-4 mt-2">
       <div className="relative w-full">
         <TextArea
-          name="contract input"
+          name="contractABI"
           className="w-full h-36 [&_textarea]:size-full"
           aria-label="Input area"
           isRequired
@@ -159,16 +134,17 @@ const JSONInput: React.FC = () => {
           })}
           callback={(item) => {
             setSelectedFunction(item.itemValue ?? null);
-            setFormValues({});
           }}
         />
       )}
 
       {selectedFunction && (
         <div className="space-y-4">
+          <TextField name="functionName" value={selectedFunction.name} className="hidden" />
+          <TextField name="functionABI" value={JSON.stringify(selectedFunction)} className="hidden" />
           <h3 className="text-md  text-klerosUIComponentsPrimaryText font-medium">{selectedFunction.name}</h3>
           {selectedFunction.inputs.map((input) =>
-            renderInputField(input, `function.${selectedFunction.name}.${input.name}`, handleFieldChange)
+            renderInputField(input, `function.${selectedFunction.name}.${input.name}`)
           )}
         </div>
       )}

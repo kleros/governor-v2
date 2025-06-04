@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { governorAddress: string } }
           <GovernorDetailsCard {...governor} />
         </div>
         <ActiveLists />
-        <MyLists />
+        <MyLists governor={governor.address} />
       </div>
     </div>
   );

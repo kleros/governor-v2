@@ -9,6 +9,14 @@
   --toastify-color-success: var(--klerosUIComponentsSuccess);
   --toastify-color-warning: var(--klerosUIComponentsWarning);
   --toastify-color-error: var(--klerosUIComponentsError);
+
+  /* prevent autofill styles to apply */
+  input {
+    /* prevent anything that tries to change this from ever getting there */
+    transition:
+      color calc(infinity * 1s) step-end,
+      background-color calc(infinity * 1s) step-end;
+  }
 }
 
 @theme {

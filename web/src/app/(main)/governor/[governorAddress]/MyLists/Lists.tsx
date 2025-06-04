@@ -4,18 +4,24 @@ import { Button, Card, CustomAccordion, DraggableList } from "@kleros/ui-compone
 import clsx from "clsx";
 import { useToggle } from "react-use";
 
+import { List, useLists } from "@/context/LIstsContext";
+import { useSubmissionFee } from "@/hooks/useSubmissionFee";
+
 import DisplayCard from "@/components/ListDisplayCard";
 import Status from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 
-import { List, lists } from "@/consts/mockLists";
+import { formatDate, isUndefined } from "@/utils";
+import { formatETH } from "@/utils/format";
 
 import AddTxnModal from "./AddTxnModal";
 
-const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ transactions }) => {
+const AccordionBody: React.FC<{ listId: number; transactions: List["transactions"] }> = ({ listId, transactions }) => {
   const [isOpen, toggleIsOpen] = useToggle(false);
-  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0]);
+  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0] ?? undefined);
+  const { governorAddress } = useLists();
+  const { data: submissionFee, isLoading } = useSubmissionFee(governorAddress);
 
   return (
     <div
@@ -29,22 +35,35 @@ const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ trans
         <DraggableList
           className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground max-md:pb-14"
           disallowEmptySelection
-          items={transactions.map((txn) => ({ name: txn.name, id: txn.index, value: txn }))}
+          items={transactions.map((txn) => ({ name: txn.name, id: txn.id, value: txn }))}
           selectionCallback={(selected) => setSelectedTxn(selected.value)}
+          renderEmptyState={() => (
+            <small className="w-full block pt-4 text-sm text-klerosUIComponentsSecondaryText text-center">
+              Add a transaction to proceed.
+            </small>
+          )}
         />
         <div className="flex flex-wrap items-center justify-start md:justify-end gap-4 px-6 pb-2.5">
           <Button text="Add tx" variant="secondary" small onPress={toggleIsOpen} />
-          <Button className="[&_p]:whitespace-break-spaces" text="Submit List with 4.5ETH deposit" small />
+          <Button
+            className="[&_p]:whitespace-break-spaces"
+            isLoading={isLoading}
+            isDisabled={isLoading || transactions.length === 0}
+            text={
+              !isUndefined(submissionFee) ? `Submit List with ${formatETH(submissionFee)} ETH deposit` : "Submit List"
+            }
+            small
+          />
         </div>
       </Card>
       <div className="flex flex-col gap-2.5 md:gap-4">
-        <DisplayCard label="Contract Address" value={selectedTxn.to} />
-        <DisplayCard label="Value" value={selectedTxn.value.toString()} />
-        <DisplayCard label="Data Input" value={selectedTxn.data} />
-        <DisplayCard label="Decoded Input" value={selectedTxn.decodedInput} />
+        <DisplayCard label="Contract Address" value={selectedTxn?.to ?? ""} />
+        <DisplayCard label="Value" value={selectedTxn?.value.toString() ?? ""} />
+        <DisplayCard label="Data Input" value={selectedTxn?.data ?? ""} />
+        <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
       </div>
 
-      <AddTxnModal {...{ isOpen, toggleIsOpen }} />
+      <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} />
     </div>
   );
 };
@@ -60,7 +79,7 @@ const AccordionTitle: React.FC<IAccordionTitle> = ({ createdOn, status, numberOf
       <span className="text-sm text-klerosUIComponentsSecondaryPurple">{numberOfTxns} Txns</span>
       <small className="flex gap-2 items-center text-xs text-klerosUIComponentsSecondaryText max-md:basis-full">
         <Calendar className="size-3.5" />
-        {createdOn}
+        {formatDate(createdOn, false, true)}
       </small>
       <Status {...{ status }} />
     </div>
@@ -68,7 +87,9 @@ const AccordionTitle: React.FC<IAccordionTitle> = ({ createdOn, status, numberOf
 };
 
 const Lists: React.FC = () => {
-  return (
+  const { lists } = useLists();
+
+  return lists.length > 0 ? (
     <CustomAccordion
       className={clsx(
         "w-full",
@@ -79,9 +100,13 @@ const Lists: React.FC = () => {
       )}
       items={lists.map((list) => ({
         title: <AccordionTitle {...list} numberOfTxns={list.transactions.length} />,
-        body: <AccordionBody transactions={list.transactions} />,
+        body: <AccordionBody transactions={list.transactions} listId={list.id} />,
       }))}
     />
+  ) : (
+    <div className="w-full flex justify-center pt-4">
+      <small className="text-sm text-klerosUIComponentsSecondaryText">Create a new list to submit.</small>
+    </div>
   );
 };
 

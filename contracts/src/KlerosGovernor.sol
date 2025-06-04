@@ -412,4 +412,10 @@ contract KlerosGovernor is IArbitrableV2 {
     function getSession(uint256 _sessionIndex) external view returns (Session memory _session) {
         _session = sessions[_sessionIndex];
     }
+
+    /// @dev Gets the total deposit required to submit a list. (submissionBaseDeposit + arbitrationCost).
+    /// @return _requiredDeposit required deposit value
+    function getTotalSubmissionDeposit() external view returns (uint256 _requiredDeposit) {
+        _requiredDeposit = submissionBaseDeposit + arbitrator.arbitrationCost(arbitratorExtraData);
+    }
 }

@@ -18,10 +18,17 @@ const getIntlOption = (time: boolean, day: boolean): Intl.DateTimeFormatOptions 
     year: "numeric",
   };
   if (time && day) {
-    return { weekday: "short", minute: "numeric", timeZone: "GMT", timeZoneName: "short", ...baseOption };
+    return {
+      weekday: "short",
+      hour: "numeric",
+      minute: "numeric",
+      timeZone: "GMT",
+      timeZoneName: "short",
+      ...baseOption,
+    };
   }
   if (time) {
-    return { minute: "numeric", timeZone: "GMT", timeZoneName: "short", ...baseOption };
+    return { hour: "numeric", minute: "numeric", timeZone: "GMT", timeZoneName: "short", ...baseOption };
   }
   if (day) {
     return { weekday: "long", ...baseOption };

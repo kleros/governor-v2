@@ -1,14 +1,27 @@
-export const getDefaultPlaceholder = (type: string): string => {
+import { TupleInput } from "./parsing";
+
+export const getDefaultPlaceholder = (inputType: TupleInput): string => {
+  const type = inputType.type;
   if ((type.startsWith("uint") || type.startsWith("int")) && !type.endsWith("[]")) return "Example: 123";
   if (type === "address") return "Example: 0xabc...123";
   if (type === "bool") return "Example: true";
   if (type === "bytes32") return "Example: 0x123abc...";
   if (type === "string") return 'Example: "hello"';
-  if (type.endsWith("[]")) {
+
+  if (type === "tuple[]") {
+    const components = inputType.components!;
+    return `Example: [[${components.map((component) => {
+      const baseExample = getDefaultPlaceholder(component).replace("Example: ", "");
+      return baseExample;
+    })}]]`;
+  }
+
+  if (type !== "tuple[]" && type.endsWith("[]")) {
     const baseType = type.slice(0, -2);
-    const baseExample = getDefaultPlaceholder(baseType).replace("Example: ", "");
+    const baseExample = getDefaultPlaceholder({ type: baseType }).replace("Example: ", "");
     return `Example: [${baseExample}, ${baseExample}]`;
   }
+
   return "Example: value";
 };
 
@@ -34,10 +47,10 @@ export const flattenToNested = (formData: Record<string, string>, fnName: string
 
       // Final part — set the value
       if (i === path.length - 1) {
-        try {
-          current[part] = JSON.parse(value); // try to parse arrays or booleans/numbers
-        } catch {
-          current[part] = value === "on" ? true : value; // handle checkboxes as booleans
+        if (value === "on" || value === "off") {
+          current[part] = value === "on";
+        } else {
+          current[part] = value;
         }
       } else {
         current[part] = current[part] || {};

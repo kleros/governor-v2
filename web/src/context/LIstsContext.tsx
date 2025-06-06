@@ -8,9 +8,9 @@ import { ListStatus } from "@/components/Status";
 
 export type ListTransaction = {
   name: string;
-  id: number;
+  id: string;
   to: Address;
-  value: string;
+  txnValue: string;
   data: string;
   decodedInput?: string;
 };
@@ -27,6 +27,7 @@ interface IListsContext {
   // creates a new list draft list.
   createNewList: () => void;
   addTxnToList: (listId: number, transaction: Omit<ListTransaction, "id">) => void;
+  updateTransactions: (listId: number, transaction: ListTransaction[]) => void;
   governorAddress: Address;
 }
 
@@ -63,7 +64,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
     (listId: number, transaction: Omit<ListTransaction, "id">) => {
       if (listId >= lists.length) return;
       const list = lists[listId];
-      const txnId = list.transactions.length;
+      const txnId = crypto.randomUUID();
 
       const newTransactions = [...list.transactions, { id: txnId, ...transaction }];
 
@@ -75,9 +76,19 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
     [lists]
   );
 
+  const updateTransactions = useCallback(
+    (listId: number, transactions: ListTransaction[]) => {
+      const updatedList = [...lists];
+      updatedList[listId].transactions = transactions;
+
+      setLists(updatedList);
+    },
+    [lists]
+  );
+
   const contextValue: IListsContext = useMemo(
-    () => ({ lists, createNewList, governorAddress, addTxnToList }),
-    [lists, createNewList, governorAddress, addTxnToList]
+    () => ({ lists, createNewList, governorAddress, addTxnToList, updateTransactions }),
+    [lists, createNewList, governorAddress, addTxnToList, updateTransactions]
   );
 
   return <ListsContext.Provider value={contextValue}>{children}</ListsContext.Provider>;

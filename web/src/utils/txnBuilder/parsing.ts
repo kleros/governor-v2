@@ -5,13 +5,11 @@ import { uncommify } from "../commify";
 
 export type TupleInput = AbiFunction["inputs"][number] & { components?: readonly TupleInput[] };
 
-export const isJSONParsable = (data: string) => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+export const forceNumbersToStringsInJson = (json: string): string => {
+  // We do this because JSON.parse parses large numbers to scientific notation and that loses precision,
+  // to avoid that we keep the large numbers as string
+  // Match numbers NOT in quotes, even in scientific notation
+  return json.replace(/([\[\s:,])(\d{15,})(?=[,\]\s}])/g, '$1"$2"');
 };
 
 export function buildArgs(inputs: readonly TupleInput[], prefix: string, formValues: Record<string, string>) {
@@ -29,23 +27,31 @@ export function buildArgs(inputs: readonly TupleInput[], prefix: string, formVal
       // handles tuple[]
       if (input.type.startsWith("tuple")) {
         try {
-          const parsed = JSON.parse(raw);
+          // doing a parse on raw value before stringifying numbers
+          JSON.parse(raw);
+          const parsed = JSON.parse(forceNumbersToStringsInJson(raw));
 
           if (Array.isArray(parsed) && input.components) {
             return convertArrayValue(parsed, input);
           }
-        } catch {
+        } catch (err) {
+          console.log(input.type, { err });
+
           return [];
         }
       }
       // handle types like uint[], string[]
       else {
         try {
-          const parsed = JSON.parse(raw);
+          // doing a parse on raw value before stringifying numbers
+          JSON.parse(raw);
+          const parsed = JSON.parse(forceNumbersToStringsInJson(raw));
           if (Array.isArray(parsed)) {
             return parsed.map((val) => convertValue(val, input.type.replace("[]", "")));
           }
-        } catch {
+        } catch (err) {
+          console.log(input.type, { err });
+
           return [];
         }
       }
@@ -53,13 +59,15 @@ export function buildArgs(inputs: readonly TupleInput[], prefix: string, formVal
 
     const value = formValues?.[fullPath];
     if (input.type === "bool") return value === "on" || value === "true";
-    if (input.type.startsWith("uint") || input.type.startsWith("int")) return BigInt(uncommify(value) ?? 0);
+    if (input.type.startsWith("uint") || input.type.startsWith("int"))
+      return BigInt((typeof value === "string" ? uncommify(value) : value) ?? 0);
     return value;
   });
 }
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const convertValue = (value: any, type: string) => {
-  if (type.startsWith("uint") || type.startsWith("int")) return BigInt(uncommify(value));
+  if (type.startsWith("uint") || type.startsWith("int"))
+    return BigInt(typeof value === "string" ? uncommify(value) : value);
   if (type === "bool") return value === "true";
   return String(value);
 };

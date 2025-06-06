@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 
 import { Button, Card, CustomAccordion, DraggableList } from "@kleros/ui-components-library";
@@ -20,7 +21,7 @@ import AddTxnModal from "./AddTxnModal";
 const AccordionBody: React.FC<{ listId: number; transactions: List["transactions"] }> = ({ listId, transactions }) => {
   const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0] ?? undefined);
-  const { governorAddress } = useLists();
+  const { governorAddress, updateTransactions } = useLists();
   const { data: submissionFee, isLoading } = useSubmissionFee(governorAddress);
 
   return (
@@ -35,8 +36,17 @@ const AccordionBody: React.FC<{ listId: number; transactions: List["transactions
         <DraggableList
           className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground max-md:pb-14"
           disallowEmptySelection
+          defaultSelectedKeys={[transactions?.[0]?.id]}
           items={transactions.map((txn) => ({ name: txn.name, id: txn.id, value: txn }))}
-          selectionCallback={(selected) => setSelectedTxn(selected.value)}
+          selectionCallback={(selected) => {
+            setSelectedTxn(selected.value);
+          }}
+          updateCallback={(items) =>
+            updateTransactions(
+              listId,
+              items.map((item) => item.value)
+            )
+          }
           renderEmptyState={() => (
             <small className="w-full block pt-4 text-sm text-klerosUIComponentsSecondaryText text-center">
               Add a transaction to proceed.
@@ -58,7 +68,7 @@ const AccordionBody: React.FC<{ listId: number; transactions: List["transactions
       </Card>
       <div className="flex flex-col gap-2.5 md:gap-4">
         <DisplayCard label="Contract Address" value={selectedTxn?.to ?? ""} />
-        <DisplayCard label="Value" value={selectedTxn?.value.toString() ?? ""} />
+        <DisplayCard label="Value" value={selectedTxn?.txnValue ?? ""} />
         <DisplayCard label="Data Input" value={selectedTxn?.data ?? ""} />
         <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
       </div>

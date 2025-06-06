@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { BigNumberField, Button, Form, Modal, Radio, TextArea, TextField } from "@kleros/ui-components-library";
 import clsx from "clsx";
-import { type Abi, type AbiFunction, Address, encodeFunctionData, isAddress } from "viem";
+import { type Abi, type AbiFunction, Address, encodeFunctionData, isAddress, isHex } from "viem";
 
 import { ListTransaction, useLists } from "@/context/LIstsContext";
 
@@ -12,6 +12,7 @@ import { flattenToNested, formatFunctionCall } from "@/utils/txnBuilder/format";
 import { buildArgs } from "@/utils/txnBuilder/parsing";
 
 import JSONInput from "./JsonInput";
+import { validateInputValue } from "@/utils/txnBuilder/validation";
 
 enum InputType {
   DataInput,
@@ -24,7 +25,8 @@ interface IAddTxnModal {
 }
 
 const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) => {
-  const [inputType, setInputType] = useState(0);
+  const [inputType, setInputType] = useState(InputType.DataInput);
+  const [txnValue, setTxnValue] = useState("0");
   const { addTxnToList } = useLists();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,8 +35,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
 
     try {
       const contractAddress: string = data["contractAddress"].toString();
-      const value: string = data["value"].toString();
-      const description: string = data["title"].toString();
+      const description: string = data["description"].toString();
       const inputMethod: string = data["inputMethod"].toString();
 
       let txnData: string = "";
@@ -46,6 +47,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
         const functionAbi: AbiFunction = JSON.parse(data["functionABI"].toString());
         const contractAbi: Abi = JSON.parse(data["contractABI"].toString());
         const functionName: string = data["functionName"].toString();
+
         if (!isUndefined(functionAbi)) {
           const parsedArgs = buildArgs(
             functionAbi.inputs,
@@ -60,12 +62,14 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
           });
 
           const nestedInputs = flattenToNested(data as Record<string, string>, functionName);
+
           decodedInput = formatFunctionCall(functionName, nestedInputs);
         }
       }
+
       const transaction: Omit<ListTransaction, "id"> = {
         to: contractAddress as Address,
-        value,
+        txnValue,
         name: description,
         data: txnData,
         decodedInput,
@@ -94,31 +98,39 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
       </h1>
       <Form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
         <TextField
-          name="title"
+          name="description"
           className="w-full"
           isRequired
           placeholder="eg. Update Non Technical Juror Fee"
           label="Title"
+          showFieldError
         />
         <TextField
           name="contractAddress"
           className="w-full"
           placeholder="eg. 0x988b3A538b618C7A603e1c11Ab82Cd16dbE28069"
-          validate={(value) => {
-            if (!isAddress(value)) return "Should be an address.";
-            else return true;
-          }}
+          showFieldError
+          validate={(val) => validateInputValue(val, { type: "address" })}
           label="Contract Address"
           isRequired
         />
-        <BigNumberField name="value" label="Value" defaultValue={"0"} isRequired className="w-full" />
+        <BigNumberField
+          name="value"
+          label="Value"
+          defaultValue={"0"}
+          onChange={(val) => setTxnValue(val.toString())}
+          minValue={"0"}
+          isRequired
+          className="w-full"
+          formatOptions={{ suffix: " eth" }}
+        />
         <Radio
           isRequired
           className="flex gap-6 md:mt-6.5"
           orientation="horizontal"
           small
           name="inputMethod"
-          defaultValue={InputType.DataInput.toString()}
+          value={inputType.toString()}
           aria-label="Input type"
           options={[
             { label: "Data Input", value: InputType.DataInput.toString() },
@@ -134,6 +146,8 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
             name="dataInput"
             className="w-full h-36 mt-1 md:mt-2 [&_textarea]:size-full"
             aria-label="Input area"
+            showFieldError
+            validate={(val) => validateInputValue(val, { type: "bytes" })}
           />
         ) : (
           <JSONInput />

@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-import { BigNumberField, Checkbox, DropdownSelect, TextArea, TextField } from "@kleros/ui-components-library";
+import { BigNumberField, DropdownSelect, TextArea, TextField } from "@kleros/ui-components-library";
 import clsx from "clsx";
 import type { Abi, AbiFunction } from "viem";
 
 import { getDefaultPlaceholder, mapSolidityToInputType } from "@/utils/txnBuilder/format";
-import { isJSONParsable, TupleInput } from "@/utils/txnBuilder/parsing";
+import { TupleInput } from "@/utils/txnBuilder/parsing";
+import { validateInputValue } from "@/utils/txnBuilder/validation";
 
 function renderInputField(input: TupleInput, path: string): JSX.Element {
   const name = input.name || path;
@@ -30,11 +31,9 @@ function renderInputField(input: TupleInput, path: string): JSX.Element {
         label={`${name} (${input.type})`}
         name={path}
         isRequired
-        placeholder={getDefaultPlaceholder(input.type)}
-        validate={(val) => {
-          if (isJSONParsable(val)) return true;
-          return "Not parsable";
-        }}
+        showFieldError
+        placeholder={getDefaultPlaceholder(input)}
+        validate={(val) => validateInputValue(val, input)}
       />
     );
   }
@@ -47,7 +46,9 @@ function renderInputField(input: TupleInput, path: string): JSX.Element {
           label={`${name} (${input.type})`}
           isRequired
           name={path}
-          placeholder={getDefaultPlaceholder(input.type)}
+          showFieldError
+          validate={(val) => validateInputValue(val, input)}
+          placeholder={getDefaultPlaceholder(input)}
           className="w-full"
         />
       )}
@@ -57,12 +58,27 @@ function renderInputField(input: TupleInput, path: string): JSX.Element {
           label={`${name} (${input.type})`}
           name={path}
           isRequired
-          placeholder={getDefaultPlaceholder(input.type)}
+          showFieldError
+          validate={(val) => validateInputValue(val, input)}
+          placeholder={getDefaultPlaceholder(input)}
           className="w-full"
         />
       )}
       {type === "boolean" && (
-        <Checkbox isRequired small key={path} label={name} name={path} defaultSelected className="w-full" />
+        <DropdownSelect
+          isRequired
+          smallButton
+          key={path}
+          label={name}
+          name={path}
+          className={"mt-2 [&_button]:w-fit"}
+          items={[
+            { id: "true", text: "true", itemValue: "on" },
+            { id: "false", text: "false", itemValue: "off" },
+          ]}
+          defaultSelectedKey={"false"}
+          callback={() => {}}
+        />
       )}
     </>
   );

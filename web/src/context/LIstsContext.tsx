@@ -28,6 +28,7 @@ interface IListsContext {
   lists: List[];
   // creates a new list draft list.
   createNewList: () => void;
+  deleteList: (listId: string) => void;
   addTxnToList: (listId: string, transaction: Omit<ListTransaction, "id">) => void;
   updateTransactions: (listId: string, transaction: ListTransaction[]) => void;
   updateList: (listId: string, updates: Partial<List>) => void;
@@ -66,6 +67,14 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
     lists.set(id, newList);
     setListsArr(Array.from(lists.entries()));
   }, [lists]);
+
+  const deleteList = useCallback(
+    (listId: string) => {
+      lists.delete(listId);
+      setListsArr(Array.from(lists.entries()));
+    },
+    [lists]
+  );
 
   const addTxnToList = useCallback(
     (listId: string, transaction: Omit<ListTransaction, "id">) => {
@@ -111,14 +120,16 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
 
   const contextValue: IListsContext = useMemo(
     () => ({
-      lists: [...lists.values()],
+      // we want to show the latest on top
+      lists: [...lists.values()].toReversed(),
       createNewList,
       governorAddress,
       addTxnToList,
       updateTransactions,
       updateList,
+      deleteList,
     }),
-    [lists, createNewList, governorAddress, addTxnToList, updateTransactions, updateList]
+    [lists, createNewList, governorAddress, addTxnToList, updateTransactions, updateList, deleteList]
   );
 
   return <ListsContext.Provider value={contextValue}>{children}</ListsContext.Provider>;

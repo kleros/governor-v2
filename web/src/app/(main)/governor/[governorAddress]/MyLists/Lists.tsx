@@ -11,13 +11,13 @@ import DisplayCard from "@/components/ListDisplayCard";
 import Status from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
+import Trash from "@/assets/svgs/icons/trash.svg";
 
 import { formatDate } from "@/utils";
 import { formatETH } from "@/utils/format";
 
 import AddTxnModal from "./AddTxnModal";
 import SubmissionButton from "./SubmissionButton";
-
 interface IAccordionBody {
   list: List;
 }
@@ -25,50 +25,59 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
   const { id: listId, transactions } = list;
   const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0] ?? undefined);
-  const { governorAddress, updateTransactions } = useLists();
+  const { governorAddress, updateTransactions, deleteList } = useLists();
 
   return (
-    <div
-      className={clsx(
-        "w-full grid grid-cols-1 md:grid-cols-[minmax(300px,_554px)_minmax(300px,_465px)]",
-        "place-content-center items-stretch",
-        "pt-2 lg:p-6  gap-2.5 md:gap-6"
-      )}
-    >
-      <Card className="size-full pb-4 flex flex-col">
-        <DraggableList
-          className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground max-md:pb-14"
-          disallowEmptySelection
-          defaultSelectedKeys={[transactions?.[0]?.id]}
-          items={transactions.map((txn) => ({ name: txn.name, id: txn.id, value: txn }))}
-          selectionCallback={(selected) => {
-            setSelectedTxn(selected.value);
-          }}
-          updateCallback={(items) =>
-            updateTransactions(
-              listId,
-              items.map((item) => item.value)
-            )
-          }
-          renderEmptyState={() => (
-            <small className="w-full block pt-4 text-sm text-klerosUIComponentsSecondaryText text-center">
-              Add a transaction to proceed.
-            </small>
-          )}
-        />
-        <div className="flex flex-wrap items-center justify-start md:justify-end gap-4 px-6 pb-2.5">
-          <Button text="Add tx" variant="secondary" small onPress={toggleIsOpen} />
-          <SubmissionButton {...{ governorAddress, list }} />
+    <div className="w-full pt-2 lg:px-6 flex flex-col justify-end items-end">
+      <Button
+        text="Remove"
+        small
+        variant="secondary"
+        icon={<Trash className="[&_path]:fill-klerosUIComponentsPrimaryBlue mr-2" />}
+        onPress={() => deleteList(listId)}
+      />
+      <div
+        className={clsx(
+          "w-full grid grid-cols-1 md:grid-cols-[minmax(300px,_554px)_minmax(300px,_465px)]",
+          "place-content-center items-stretch",
+          "pt-2 lg:py-6 gap-2.5 md:gap-6"
+        )}
+      >
+        <Card className="size-full pb-4 flex flex-col">
+          <DraggableList
+            className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground max-md:pb-14"
+            disallowEmptySelection
+            defaultSelectedKeys={[transactions?.[0]?.id]}
+            items={transactions.map((txn) => ({ name: txn.name, id: txn.id, value: txn }))}
+            selectionCallback={(selected) => {
+              setSelectedTxn(selected.value);
+            }}
+            updateCallback={(items) =>
+              updateTransactions(
+                listId,
+                items.map((item) => item.value)
+              )
+            }
+            renderEmptyState={() => (
+              <small className="w-full block pt-4 text-sm text-klerosUIComponentsSecondaryText text-center">
+                Add a transaction to proceed.
+              </small>
+            )}
+          />
+          <div className="flex flex-wrap items-center justify-start md:justify-end gap-4 px-6 pb-2.5">
+            <Button text="Add tx" variant="secondary" small onPress={toggleIsOpen} />
+            <SubmissionButton {...{ governorAddress, list }} />
+          </div>
+        </Card>
+        <div className="flex flex-col gap-2.5 md:gap-4">
+          <DisplayCard label="Contract Address" value={selectedTxn?.to ?? ""} />
+          <DisplayCard label="Value" value={selectedTxn?.txnValue ? formatETH(BigInt(selectedTxn.txnValue)) : ""} />
+          <DisplayCard label="Data Input" value={selectedTxn?.data ?? ""} />
+          <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
         </div>
-      </Card>
-      <div className="flex flex-col gap-2.5 md:gap-4">
-        <DisplayCard label="Contract Address" value={selectedTxn?.to ?? ""} />
-        <DisplayCard label="Value" value={formatETH(BigInt(selectedTxn?.txnValue ?? "0"))} />
-        <DisplayCard label="Data Input" value={selectedTxn?.data ?? ""} />
-        <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
-      </div>
 
-      <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} />
+        <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} />
+      </div>
     </div>
   );
 };

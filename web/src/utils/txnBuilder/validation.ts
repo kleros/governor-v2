@@ -1,7 +1,8 @@
 import { isAddress, isHex } from "viem";
+
 import { forceNumbersToStringsInJson, TupleInput } from "./parsing";
 
-export const validateInputValue = (value: string | BigInt | BigNumber | null, inputType: TupleInput): true | string => {
+export const validateInputValue = (value: string | bigint | BigNumber | null, inputType: TupleInput): true | string => {
   if (!value) return true;
 
   const val = value.toString().trim();

@@ -6,6 +6,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { ListStatus } from "@/components/Status";
 
+import { isUndefined } from "@/utils";
+
 export type ListTransaction = {
   name: string;
   id: string;
@@ -16,7 +18,7 @@ export type ListTransaction = {
 };
 
 export type List = {
-  id: number;
+  id: string;
   createdOn: number;
   status: ListStatus;
   transactions: ListTransaction[];
@@ -26,8 +28,9 @@ interface IListsContext {
   lists: List[];
   // creates a new list draft list.
   createNewList: () => void;
-  addTxnToList: (listId: number, transaction: Omit<ListTransaction, "id">) => void;
-  updateTransactions: (listId: number, transaction: ListTransaction[]) => void;
+  addTxnToList: (listId: string, transaction: Omit<ListTransaction, "id">) => void;
+  updateTransactions: (listId: string, transaction: ListTransaction[]) => void;
+  updateList: (listId: string, updates: Partial<List>) => void;
   governorAddress: Address;
 }
 
@@ -47,48 +50,75 @@ type ListsProviderProps = {
 };
 
 export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governorAddress }) => {
-  const [lists, setLists] = useLocalStorage<List[]>(`${governorAddress}-lists`, []);
+  const [listsArr, setListsArr] = useLocalStorage<[string, List][]>(`${governorAddress}-lists`, []);
+  const lists = useMemo(() => new Map(listsArr), [listsArr]);
 
   const createNewList = useCallback(() => {
+    const id = crypto.randomUUID();
+
     const newList: List = {
-      id: lists.length,
+      id,
       createdOn: Math.floor(Date.now() / 1000),
       status: ListStatus.Draft,
       transactions: [],
     };
-    setLists([...lists, newList]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    lists.set(id, newList);
+    setListsArr(Array.from(lists.entries()));
   }, [lists]);
 
   const addTxnToList = useCallback(
-    (listId: number, transaction: Omit<ListTransaction, "id">) => {
-      if (listId >= lists.length) return;
-      const list = lists[listId];
+    (listId: string, transaction: Omit<ListTransaction, "id">) => {
+      const list = lists.get(listId);
+      if (isUndefined(list)) return;
+
       const txnId = crypto.randomUUID();
 
       const newTransactions = [...list.transactions, { id: txnId, ...transaction }];
 
-      const updatedList = [...lists];
-      updatedList[listId] = { ...list, transactions: newTransactions };
+      list.transactions = newTransactions;
+      lists.set(listId, list);
 
-      setLists([...updatedList]);
+      setListsArr(Array.from(lists.entries()));
     },
     [lists]
   );
 
   const updateTransactions = useCallback(
-    (listId: number, transactions: ListTransaction[]) => {
-      const updatedList = [...lists];
-      updatedList[listId].transactions = transactions;
+    (listId: string, transactions: ListTransaction[]) => {
+      const list = lists.get(listId);
+      if (isUndefined(list)) return;
 
-      setLists(updatedList);
+      list.transactions = transactions;
+      lists.set(listId, list);
+
+      setListsArr(Array.from(lists.entries()));
+    },
+    [lists]
+  );
+
+  const updateList = useCallback(
+    (listId: string, updates: Partial<List>) => {
+      const list = lists.get(listId);
+      if (isUndefined(list)) return;
+
+      lists.set(listId, { ...list, ...updates });
+
+      setListsArr(Array.from(lists.entries()));
     },
     [lists]
   );
 
   const contextValue: IListsContext = useMemo(
-    () => ({ lists, createNewList, governorAddress, addTxnToList, updateTransactions }),
-    [lists, createNewList, governorAddress, addTxnToList, updateTransactions]
+    () => ({
+      lists: [...lists.values()],
+      createNewList,
+      governorAddress,
+      addTxnToList,
+      updateTransactions,
+      updateList,
+    }),
+    [lists, createNewList, governorAddress, addTxnToList, updateTransactions, updateList]
   );
 
   return <ListsContext.Provider value={contextValue}>{children}</ListsContext.Provider>;

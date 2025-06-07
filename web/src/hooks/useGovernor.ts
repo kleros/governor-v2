@@ -30,3 +30,12 @@ export const useWriteExecuteSubmissions = createUseWriteContract({
   abi: klerosGovernorAbi,
   functionName: "executeSubmissions",
 });
+
+export const useSimulateSubmitList = createUseSimulateContract({
+  abi: klerosGovernorAbi,
+  functionName: "submitList",
+});
+export const useWriteSubmitList = createUseWriteContract({
+  abi: klerosGovernorAbi,
+  functionName: "submitList",
+});

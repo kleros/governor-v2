@@ -3,23 +3,23 @@ import { useState } from "react";
 
 import { BigNumberField, Button, Form, Modal, Radio, TextArea, TextField } from "@kleros/ui-components-library";
 import clsx from "clsx";
-import { type Abi, type AbiFunction, Address, encodeFunctionData, isAddress, isHex } from "viem";
+import { type Abi, type AbiFunction, Address, encodeFunctionData, parseEther } from "viem";
 
 import { ListTransaction, useLists } from "@/context/LIstsContext";
 
 import { isUndefined } from "@/utils";
 import { flattenToNested, formatFunctionCall } from "@/utils/txnBuilder/format";
 import { buildArgs } from "@/utils/txnBuilder/parsing";
+import { validateInputValue } from "@/utils/txnBuilder/validation";
 
 import JSONInput from "./JsonInput";
-import { validateInputValue } from "@/utils/txnBuilder/validation";
 
 enum InputType {
   DataInput,
   ContractInput,
 }
 interface IAddTxnModal {
-  listId: number;
+  listId: string;
   isOpen?: boolean;
   toggleIsOpen: () => void;
 }
@@ -69,7 +69,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
 
       const transaction: Omit<ListTransaction, "id"> = {
         to: contractAddress as Address,
-        txnValue,
+        txnValue: parseEther(txnValue).toString(),
         name: description,
         data: txnData,
         decodedInput,
@@ -104,6 +104,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
           placeholder="eg. Update Non Technical Juror Fee"
           label="Title"
           showFieldError
+          validate={(val) => (val.includes(",") ? "commas not allowed." : true)}
         />
         <TextField
           name="contractAddress"

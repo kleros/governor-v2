@@ -6,23 +6,26 @@ import clsx from "clsx";
 import { useToggle } from "react-use";
 
 import { List, useLists } from "@/context/LIstsContext";
-import { useSubmissionFee } from "@/hooks/useSubmissionFee";
 
 import DisplayCard from "@/components/ListDisplayCard";
 import Status from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 
-import { formatDate, isUndefined } from "@/utils";
+import { formatDate } from "@/utils";
 import { formatETH } from "@/utils/format";
 
 import AddTxnModal from "./AddTxnModal";
+import SubmissionButton from "./SubmissionButton";
 
-const AccordionBody: React.FC<{ listId: number; transactions: List["transactions"] }> = ({ listId, transactions }) => {
+interface IAccordionBody {
+  list: List;
+}
+const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
+  const { id: listId, transactions } = list;
   const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0] ?? undefined);
   const { governorAddress, updateTransactions } = useLists();
-  const { data: submissionFee, isLoading } = useSubmissionFee(governorAddress);
 
   return (
     <div
@@ -55,20 +58,12 @@ const AccordionBody: React.FC<{ listId: number; transactions: List["transactions
         />
         <div className="flex flex-wrap items-center justify-start md:justify-end gap-4 px-6 pb-2.5">
           <Button text="Add tx" variant="secondary" small onPress={toggleIsOpen} />
-          <Button
-            className="[&_p]:whitespace-break-spaces"
-            isLoading={isLoading}
-            isDisabled={isLoading || transactions.length === 0}
-            text={
-              !isUndefined(submissionFee) ? `Submit List with ${formatETH(submissionFee)} ETH deposit` : "Submit List"
-            }
-            small
-          />
+          <SubmissionButton {...{ governorAddress, list }} />
         </div>
       </Card>
       <div className="flex flex-col gap-2.5 md:gap-4">
         <DisplayCard label="Contract Address" value={selectedTxn?.to ?? ""} />
-        <DisplayCard label="Value" value={selectedTxn?.txnValue ?? ""} />
+        <DisplayCard label="Value" value={formatETH(BigInt(selectedTxn?.txnValue ?? "0"))} />
         <DisplayCard label="Data Input" value={selectedTxn?.data ?? ""} />
         <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
       </div>
@@ -78,15 +73,11 @@ const AccordionBody: React.FC<{ listId: number; transactions: List["transactions
   );
 };
 
-interface IAccordionTitle extends Pick<List, "createdOn" | "status"> {
-  numberOfTxns: number;
-}
-
-const AccordionTitle: React.FC<IAccordionTitle> = ({ createdOn, status, numberOfTxns }) => {
+const AccordionTitle: React.FC<List> = ({ createdOn, status, transactions }) => {
   return (
     <div className="flex flex-wrap gap-2 md:gap-8 items-center">
       <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">List</h3>
-      <span className="text-sm text-klerosUIComponentsSecondaryPurple">{numberOfTxns} Txns</span>
+      <span className="text-sm text-klerosUIComponentsSecondaryPurple">{transactions.length} Txns</span>
       <small className="flex gap-2 items-center text-xs text-klerosUIComponentsSecondaryText max-md:basis-full">
         <Calendar className="size-3.5" />
         {formatDate(createdOn, false, true)}
@@ -109,8 +100,8 @@ const Lists: React.FC = () => {
         "[&>div>div>div]:p-0"
       )}
       items={lists.map((list) => ({
-        title: <AccordionTitle {...list} numberOfTxns={list.transactions.length} />,
-        body: <AccordionBody transactions={list.transactions} listId={list.id} />,
+        title: <AccordionTitle {...list} />,
+        body: <AccordionBody {...{ list }} />,
       }))}
     />
   ) : (

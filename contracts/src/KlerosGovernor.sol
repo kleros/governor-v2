@@ -4,6 +4,7 @@ pragma solidity 0.8.24;
 
 import {IArbitrableV2, IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
 import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
+import "./interfaces/IArbSys.sol";
 
 /// @title KlerosGovernor for V2. Note that appeal functionality and evidence submission will be handled by the court.
 contract KlerosGovernor is IArbitrableV2 {
@@ -41,8 +42,10 @@ contract KlerosGovernor is IArbitrableV2 {
         uint256 submissionTime; // The time when the list was submitted.
         bool approved; // Whether the list was approved for execution or not.
         uint256 approvalTime; // The time when the list was approved.
+        uint256 submissionBlock; // Block of list submission.
     }
 
+    ArbSys constant arbSys = ArbSys(address(100)); // ArbSys implementation https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference#arbsys
     IArbitratorV2 public arbitrator; // Arbitrator contract.
     bytes public arbitratorExtraData; // Extra data for arbitrator.
     IDisputeTemplateRegistry public templateRegistry; // The dispute template registry.
@@ -212,6 +215,10 @@ contract KlerosGovernor is IArbitrableV2 {
         Session storage session = sessions[sessions.length - 1];
         Submission storage submission = submissions.push();
         submission.submitter = payable(msg.sender);
+
+        // https://docs.arbitrum.io/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time
+        submission.submissionBlock = arbSys.arbBlockNumber();
+
         // Do the assignment first to avoid creating a new variable and bypass a 'stack too deep' error.
         submission.deposit = submissionBaseDeposit + arbitrator.arbitrationCost(arbitratorExtraData);
         require(msg.value >= submission.deposit, "Not enough ETH to cover deposit");
@@ -250,7 +257,7 @@ contract KlerosGovernor is IArbitrableV2 {
 
     /// @dev Withdraws submitted transaction list. Reimburses submission deposit.
     /// Withdrawal is only possible during the first half of the submission period and during withdrawTimeout after the submission is made.
-    /// @param _submissionID Submission's index in the array of submitted lists of the current sesssion.
+    /// @param _submissionID Submission's index in the array of submitted lists of the current session.
     /// @param _listHash Hash of a withdrawing list.
     function withdrawTransactionList(uint256 _submissionID, bytes32 _listHash) external {
         Session storage session = sessions[sessions.length - 1];
@@ -385,6 +392,13 @@ contract KlerosGovernor is IArbitrableV2 {
     function getSubmittedLists(uint256 _session) external view returns (uint256[] memory submittedLists) {
         Session storage session = sessions[_session];
         submittedLists = session.submittedLists;
+    }
+
+    /// @dev Gets the submission from listId.
+    /// @param _listId The index of the transaction list in the array of lists.
+    /// @return submission List belonging to that listId.
+    function getSubmission(uint256 _listId) external view returns (Submission memory submission) {
+        submission = submissions[_listId];
     }
 
     /// @dev Gets the number of transactions in the list.

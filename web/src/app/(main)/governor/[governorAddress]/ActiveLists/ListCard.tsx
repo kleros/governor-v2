@@ -4,21 +4,29 @@ import { useRef } from "react";
 
 import clsx from "clsx";
 import { useHoverDirty, useToggle } from "react-use";
+import { Address } from "viem";
+
+import { Submission } from "@/hooks/useFetchSubmittedLists";
 
 import { AddressOrName, IdenticonOrAvatar } from "@/components/ConnectWallet/AccountDisplay";
-import Status from "@/components/Status";
+import Status, { ListStatus } from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 import Search from "@/assets/svgs/icons/search.svg";
 
-import { List } from "@/consts/mockLists";
+import { formatDate } from "@/utils";
 
 import ExamineModal from "./ExamineModal";
 
-const ListCard: React.FC<List> = (list) => {
+interface IListCard {
+  list: Submission;
+  governorAddress: Address;
+}
+const ListCard: React.FC<IListCard> = ({ list, governorAddress }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const isHovered = useHoverDirty(cardRef);
   const [isOpen, toggleIsOpen] = useToggle(false);
+
   return (
     <div
       ref={cardRef}
@@ -36,11 +44,14 @@ const ListCard: React.FC<List> = (list) => {
         </div>
         <div className="flex gap-2 items-center">
           <Calendar className="size-3.5" />
-          <span className="text-klerosUIComponentsSecondaryText text-sm">{list.createdOn}</span>
+          <span className="text-klerosUIComponentsSecondaryText text-sm">
+            {formatDate(Number(list.submissionTime), false, true)}
+          </span>
         </div>
         <div className="w-full flex justify-between items-center">
-          <small className="text-sm text-klerosUIComponentsPrimaryText">{list.transactions.length} Txns</small>
-          <Status status={list.status} />
+          <small className="text-sm text-klerosUIComponentsPrimaryText">{list.txs.length} Txns</small>
+          {/* List will always be in Submitted status here, for Approved lists there's another section */}
+          <Status status={ListStatus.Submitted} />
         </div>
       </div>
       {isHovered ? (
@@ -57,7 +68,7 @@ const ListCard: React.FC<List> = (list) => {
           <p className="text-base text-klerosUIComponentsSecondaryBlue">Examine</p>
         </div>
       ) : null}
-      <ExamineModal {...{ isOpen, toggleIsOpen, list }} />
+      <ExamineModal {...{ isOpen, toggleIsOpen, list, governorAddress }} />
     </div>
   );
 };

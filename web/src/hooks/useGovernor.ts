@@ -39,3 +39,12 @@ export const useWriteSubmitList = createUseWriteContract({
   abi: klerosGovernorAbi,
   functionName: "submitList",
 });
+
+export const useSimulateWithdrawTransactionList = createUseSimulateContract({
+  abi: klerosGovernorAbi,
+  functionName: "withdrawTransactionList",
+});
+export const useWriteWithdrawTransactionList = createUseWriteContract({
+  abi: klerosGovernorAbi,
+  functionName: "withdrawTransactionList",
+});

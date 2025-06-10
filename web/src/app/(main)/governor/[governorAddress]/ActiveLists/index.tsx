@@ -1,10 +1,24 @@
+"use client";
+import { Address } from "viem";
+
+import { useFetchSubmittedLists } from "@/hooks/useFetchSubmittedLists";
+
+import { Skeleton } from "@/components/Skeleton";
+
 import Paper from "@/assets/svgs/icons/paper.svg";
 
-import { lists } from "@/consts/mockLists";
+import { isUndefined } from "@/utils";
 
 import ListCard from "./ListCard";
 
-const ActiveLists: React.FC = () => {
+const ActiveLists: React.FC<{ governorAddress: Address }> = ({ governorAddress }) => {
+  const { data: lists, isLoading } = useFetchSubmittedLists(governorAddress);
+
+  const AlternateElement = isLoading ? (
+    <Skeleton className="w-[150px] md:w-[300px] h-[24px]" />
+  ) : (
+    <span className="text-klerosUIComponentsSecondaryText text-sm">No lists submitted yet.</span>
+  );
   return (
     <div className="w-full flex flex-col gap-4 items-start">
       <div className="flex gap-2 items-center">
@@ -12,9 +26,9 @@ const ActiveLists: React.FC = () => {
         <h2 className="text-base text-klerosUIComponentsPrimaryText">Active Lists</h2>
       </div>
       <div className="flex flex-wrap gap-4">
-        {lists.map((list) => (
-          <ListCard key={list.id} {...list} />
-        ))}
+        {isUndefined(lists) || lists.length === 0
+          ? AlternateElement
+          : lists.map((list) => <ListCard key={list.listHash} {...{ governorAddress, list }} />)}
       </div>
     </div>
   );

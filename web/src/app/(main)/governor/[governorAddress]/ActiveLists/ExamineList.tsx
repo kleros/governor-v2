@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Card, CustomAccordion, DraggableList } from "@kleros/ui-components-library";
 import clsx from "clsx";
 
+import { Submission, SubmissionTxn } from "@/hooks/useFetchSubmittedLists";
+
 import { AddressOrName, IdenticonOrAvatar } from "@/components/ConnectWallet/AccountDisplay";
 import DisplayCard from "@/components/ListDisplayCard";
-import Status from "@/components/Status";
+import Status, { ListStatus } from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 
-import { List } from "@/consts/mockLists";
+import { formatDate } from "@/utils";
 
-const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ transactions }) => {
-  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0]);
+const AccordionBody: React.FC<{ transactions: readonly SubmissionTxn[] }> = ({ transactions }) => {
+  const [selectedTxn, setSelectedTxn] = useState<SubmissionTxn>(transactions[0]);
 
   return (
     <div
@@ -26,35 +28,43 @@ const AccordionBody: React.FC<{ transactions: List["transactions"] }> = ({ trans
         <DraggableList
           dragDisabled
           deletionDisabled
-          defaultSelectedKeys={[0]}
+          defaultSelectedKeys={[`${transactions[0].description}-0`]}
           disallowEmptySelection
           className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground"
-          items={transactions.map((txn) => ({ name: txn.name, id: txn.index, value: txn }))}
+          items={transactions.map((txn, index) => ({
+            name: txn.description,
+            id: `${txn.description}-${index}`,
+            value: txn,
+          }))}
           selectionCallback={(selected) => setSelectedTxn(selected.value)}
         />
       </Card>
       <div className="flex flex-col gap-4 md:gap-4">
-        <DisplayCard label="Contract Address" value={selectedTxn.to} />
+        <DisplayCard label="Contract Address" value={selectedTxn.target} />
         <DisplayCard label="Value" value={selectedTxn.value.toString()} />
         <DisplayCard label="Data Input" value={selectedTxn.data} />
-        <DisplayCard label="Decoded Input" value={selectedTxn.decodedInput} />
       </div>
     </div>
   );
 };
 
-interface IAccordionTitle extends Pick<List, "submitter" | "createdOn" | "status"> {
+interface IAccordionTitle extends Pick<Submission, "submitter" | "submissionTime" | "approved"> {
   numberOfTxns: number;
 }
 
-const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, createdOn, numberOfTxns, status }) => {
+const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, submissionTime, numberOfTxns, approved }) => {
+  const status = useMemo(() => {
+    if (approved) return ListStatus.Approved;
+    return ListStatus.Submitted;
+  }, [approved]);
+
   return (
     <div className="flex flex-wrap gap-2 md:gap-8 items-center">
       <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">List</h3>
       <span className="text-sm text-klerosUIComponentsPrimaryPurple">{numberOfTxns} Txns</span>
       <small className="flex gap-2 items-center text-xs text-klerosUIComponentsSecondaryText max-md:basis-full">
         <Calendar className="size-3.5" />
-        {createdOn}
+        {formatDate(Number(submissionTime), false, true)}
       </small>
       <Status {...{ status }} />
       <div className="flex gap-2 items-center max-md:basis-full">
@@ -65,7 +75,7 @@ const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, createdOn, numbe
   );
 };
 
-const ExamineList: React.FC<List> = (list) => {
+const ExamineList: React.FC<Submission> = (list) => {
   return (
     <CustomAccordion
       className={clsx(
@@ -77,8 +87,8 @@ const ExamineList: React.FC<List> = (list) => {
       )}
       items={[
         {
-          title: <AccordionTitle {...list} numberOfTxns={list.transactions.length} />,
-          body: <AccordionBody transactions={list.transactions} />,
+          title: <AccordionTitle {...list} numberOfTxns={list.txs.length} />,
+          body: <AccordionBody transactions={list.txs} />,
         },
       ]}
     />

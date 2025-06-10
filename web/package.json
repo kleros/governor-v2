@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn generate && next dev",
     "build-netlify": "yarn generate && next build",
     "build-devnet": "scripts/runEnv.sh devnet 'yarn generate && next build'",
     "start-local": "scripts/runEnv.sh local 'yarn generate && yarn dev'",

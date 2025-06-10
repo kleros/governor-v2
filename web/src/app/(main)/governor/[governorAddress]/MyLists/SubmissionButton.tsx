@@ -10,6 +10,7 @@ import { List, useLists } from "@/context/LIstsContext";
 import { useSimulateSubmitList, useWriteSubmitList } from "@/hooks/useGovernor";
 import { useSubmissionFee } from "@/hooks/useSubmissionFee";
 
+import { EnsureChain } from "@/components/EnsureChain";
 import { ListStatus } from "@/components/Status";
 
 import { isUndefined } from "@/utils";
@@ -62,13 +63,15 @@ const SubmissionButton: React.FC<ISubmissionButton> = ({ governorAddress, list }
     }
   };
   return (
-    <Button
-      className="[&_p]:whitespace-break-spaces"
-      {...{ isDisabled, isLoading }}
-      text={!isUndefined(submissionFee) ? `Submit List with ${formatETH(submissionFee)} ETH deposit` : "Submit List"}
-      small
-      onPress={handleSubmitList}
-    />
+    <EnsureChain>
+      <Button
+        className="[&_p]:whitespace-break-spaces"
+        {...{ isDisabled, isLoading }}
+        text={!isUndefined(submissionFee) ? `Submit List with ${formatETH(submissionFee)} ETH deposit` : "Submit List"}
+        small
+        onPress={handleSubmitList}
+      />
+    </EnsureChain>
   );
 };
 

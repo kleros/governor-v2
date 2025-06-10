@@ -29,7 +29,7 @@ export default function Page({ params }: { params: { governorAddress: string } }
           <Breadcrumb name={governor.name} />
           <GovernorDetailsCard {...governor} />
         </div>
-        <ActiveLists />
+        <ActiveLists governorAddress={governor.address} />
         <MyLists governor={governor.address} />
       </div>
     </div>

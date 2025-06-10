@@ -4,6 +4,7 @@ export enum ListStatus {
   Draft,
   Submitted,
   Executed,
+  Approved,
 }
 
 const Status: React.FC<{ status: ListStatus }> = ({ status }) => {
@@ -23,6 +24,7 @@ const Status: React.FC<{ status: ListStatus }> = ({ status }) => {
       {status === ListStatus.Executed && "Executed"}
       {status === ListStatus.Draft && "Draft"}
       {status === ListStatus.Submitted && "Submitted"}
+      {status === ListStatus.Approved && "Approved"}
     </small>
   );
 };

@@ -2,9 +2,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Address } from "viem";
 
-import { usePublicClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 
 import { isUndefined } from "@/utils";
+
+import { DEFAULT_CHAIN } from "@/consts";
 
 import { klerosGovernorAbi } from "./contracts/generated";
 
@@ -31,12 +33,14 @@ export type Submission = {
 };
 
 /** Fetches the submitted lists with transactions, each txn having the description */
-export const useFetchSubmittedLists = (governorAddress: Address) => {
-  const { data: session } = useFetchSession(governorAddress);
-  const publicClient = usePublicClient();
+export const useFetchSubmittedLists = (governorAddress: Address, previousSession = false) => {
+  const { data: session } = useFetchSession(governorAddress, previousSession);
+  const { chainId } = useAccount();
+  // If disconnected, revert to DEFAULT_CHAIN
+  const publicClient = usePublicClient({ chainId: chainId ?? DEFAULT_CHAIN.id });
 
   return useQuery<Submission[] | null>({
-    queryKey: [`${governorAddress}-lists`],
+    queryKey: [`${governorAddress}-${previousSession ? "previous" : "current"}-lists`],
     refetchInterval: 5000,
     enabled: !isUndefined(session) && !isUndefined(publicClient),
     queryFn: async () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 
 import clsx from "clsx";
 import { useHoverDirty, useToggle } from "react-use";
@@ -27,6 +27,12 @@ const ListCard: React.FC<IListCard> = ({ list, governorAddress }) => {
   const isHovered = useHoverDirty(cardRef);
   const [isOpen, toggleIsOpen] = useToggle(false);
 
+  const status = useMemo(() => {
+    if (list.txs.every((tx) => tx.executed)) return ListStatus.Executed;
+    else if (list.approved) return ListStatus.Approved;
+    return ListStatus.Submitted;
+  }, [list]);
+
   return (
     <div
       ref={cardRef}
@@ -50,8 +56,7 @@ const ListCard: React.FC<IListCard> = ({ list, governorAddress }) => {
         </div>
         <div className="w-full flex justify-between items-center">
           <small className="text-sm text-klerosUIComponentsPrimaryText">{list.txs.length} Txns</small>
-          {/* List will always be in Submitted status here, for Approved lists there's another section */}
-          <Status status={ListStatus.Submitted} />
+          <Status {...{ status }} />
         </div>
       </div>
       {isHovered ? (

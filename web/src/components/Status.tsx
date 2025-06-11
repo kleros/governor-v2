@@ -18,6 +18,7 @@ const Status: React.FC<{ status: ListStatus }> = ({ status }) => {
           "before:bg-klerosUIComponentsSuccess ": status === ListStatus.Executed,
           "before:bg-klerosUIComponentsSecondaryText ": status === ListStatus.Draft,
           "before:bg-klerosUIComponentsPrimaryBlue ": status === ListStatus.Submitted,
+          "before:bg-klerosUIComponentsWarning ": status === ListStatus.Approved,
         }
       )}
     >

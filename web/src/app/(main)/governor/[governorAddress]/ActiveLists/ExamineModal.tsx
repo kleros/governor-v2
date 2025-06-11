@@ -1,4 +1,6 @@
 "use client";
+import { useMemo } from "react";
+
 import { Button, Modal } from "@kleros/ui-components-library";
 import clsx from "clsx";
 import { Address } from "viem";
@@ -6,6 +8,7 @@ import { Address } from "viem";
 import { Submission } from "@/hooks/useFetchSubmittedLists";
 
 import ExamineList from "./ExamineList";
+import ExecuteListButton from "./ExecuteListButton";
 import WithdrawButton from "./WithdrawButton";
 
 interface IExamineModal {
@@ -16,6 +19,12 @@ interface IExamineModal {
 }
 
 const ExamineModal: React.FC<IExamineModal> = ({ isOpen, toggleIsOpen, list, governorAddress }) => {
+  const ActionButton = useMemo(() => {
+    if (list.txs.every((tx) => tx.executed)) return null;
+    else if (list.approved) return <ExecuteListButton {...list} {...{ governorAddress }} />;
+    return <WithdrawButton {...list} {...{ governorAddress }} />;
+  }, [list, governorAddress]);
+
   return (
     <Modal
       className={clsx(
@@ -32,7 +41,7 @@ const ExamineModal: React.FC<IExamineModal> = ({ isOpen, toggleIsOpen, list, gov
       <ExamineList {...list} />
       <div className="flex w-full justify-between items-center">
         <Button text="Return" slot="close" variant="secondary" />
-        <WithdrawButton {...list} {...{ governorAddress }} />
+        {ActionButton}
       </div>
     </Modal>
   );

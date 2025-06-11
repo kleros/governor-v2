@@ -48,3 +48,12 @@ export const useWriteWithdrawTransactionList = createUseWriteContract({
   abi: klerosGovernorAbi,
   functionName: "withdrawTransactionList",
 });
+
+export const useSimulateExecuteTransactionList = createUseSimulateContract({
+  abi: klerosGovernorAbi,
+  functionName: "executeTransactionList",
+});
+export const useWriteExecuteTransactionList = createUseWriteContract({
+  abi: klerosGovernorAbi,
+  functionName: "executeTransactionList",
+});

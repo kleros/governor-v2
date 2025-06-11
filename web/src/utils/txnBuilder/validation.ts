@@ -60,7 +60,7 @@ export const validateInputValue = (value: string | bigint | BigNumber | null, in
   // String / Bytes
   if (inputType.type === "string") return true;
   if (inputType.type.startsWith("bytes")) {
-    return isHex(val) ? true : "Invalid bytes format";
+    return isHex(val) && val.slice(2).length % 2 === 0 ? true : "Invalid bytes format";
   }
 
   // Unsigned Integer

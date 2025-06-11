@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, Card, CustomAccordion, DraggableList } from "@kleros/ui-components-library";
 import clsx from "clsx";
@@ -24,8 +24,15 @@ interface IAccordionBody {
 const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
   const { id: listId, transactions } = list;
   const [isOpen, toggleIsOpen] = useToggle(false);
-  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions[0] ?? undefined);
+  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions?.[0]);
   const { governorAddress, updateTransactions, deleteList } = useLists();
+
+  // select the latest txn, when new txn added
+  useEffect(() => {
+    if (transactions.length) {
+      setSelectedTxn(transactions[transactions.length - 1]);
+    }
+  }, [transactions]);
 
   return (
     <div className="w-full pt-2 lg:px-6 flex flex-col justify-end items-end">
@@ -47,7 +54,7 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
           <DraggableList
             className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground max-md:pb-14"
             disallowEmptySelection
-            defaultSelectedKeys={[transactions?.[0]?.id]}
+            selectedKeys={[selectedTxn?.id]}
             items={transactions.map((txn) => ({ name: txn.name, id: txn.id, value: txn }))}
             selectionCallback={(selected) => {
               setSelectedTxn(selected.value);

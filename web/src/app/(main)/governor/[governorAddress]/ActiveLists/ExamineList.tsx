@@ -48,15 +48,16 @@ const AccordionBody: React.FC<{ transactions: readonly SubmissionTxn[] }> = ({ t
   );
 };
 
-interface IAccordionTitle extends Pick<Submission, "submitter" | "submissionTime" | "approved"> {
+interface IAccordionTitle extends Submission {
   numberOfTxns: number;
 }
 
-const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, submissionTime, numberOfTxns, approved }) => {
+const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, submissionTime, numberOfTxns, approved, txs }) => {
   const status = useMemo(() => {
-    if (approved) return ListStatus.Approved;
+    if (txs.every((tx) => tx.executed)) return ListStatus.Executed;
+    else if (approved) return ListStatus.Approved;
     return ListStatus.Submitted;
-  }, [approved]);
+  }, [approved, txs]);
 
   return (
     <div className="flex flex-wrap gap-2 md:gap-8 items-center">

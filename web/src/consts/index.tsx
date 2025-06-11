@@ -7,3 +7,5 @@ export const SUPPORTED_CHAINS: [AppKitNetwork, ...AppKitNetwork[]] = isProductio
   : [mainnet, arbitrumSepolia];
 
 export const DEFAULT_CHAIN: Chain = isProductionDeployment() ? arbitrum : arbitrumSepolia;
+
+export const COURT_SITE = process.env.NEXT_PUBLIC_COURT_SITE ?? "https://v2.kleros.builders/#";

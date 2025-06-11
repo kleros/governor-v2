@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@kleros/ui-components-library";
+import Link from "next/link";
 
 import { usePublicClient } from "wagmi";
 
@@ -16,10 +17,12 @@ import { Skeleton } from "@/components/Skeleton";
 import WrapWithCountdown from "@/components/WrapWithCountdown";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
+import KlerosIcon from "@/assets/svgs/icons/kleros.svg";
 
 import { formatDate, isUndefined } from "@/utils";
 import { wrapWithToast } from "@/utils/wrapWithToast";
 
+import { COURT_SITE } from "@/consts";
 import { Governor } from "@/consts/governors";
 
 const SessionInfo: React.FC<{ address: Governor["address"] }> = ({ address }) => {
@@ -63,22 +66,28 @@ const SessionInfo: React.FC<{ address: Governor["address"] }> = ({ address }) =>
       </div>
       {sessionEnd ? (
         <WrapWithCountdown date={Number(sessionEnd) * 1000} text="Session ends in $$$" onComplete={refetch}>
-          <EnsureChain>
-            <Button
-              text={buttonText()}
-              small
-              isDisabled={isLoadingConfig || isSending || isError}
-              isLoading={isLoadingConfig || isSending}
-              onPress={async () => {
-                if (publicClient && executeConfig?.request) {
-                  setIsSending(true);
-                  wrapWithToast(async () => await executeSubmissions(executeConfig.request), publicClient).finally(() =>
-                    setIsSending(false)
-                  );
-                }
-              }}
-            />
-          </EnsureChain>
+          {session?.disputeID ? (
+            <Link href={`${COURT_SITE}/cases/${session.disputeID}/overview`} target="_blank" rel="noreferrer">
+              <Button small Icon={KlerosIcon} text={`View Case #${session.disputeID ?? 0}`} />
+            </Link>
+          ) : (
+            <EnsureChain>
+              <Button
+                text={buttonText()}
+                small
+                isDisabled={isLoadingConfig || isSending || isError}
+                isLoading={isLoadingConfig || isSending}
+                onPress={async () => {
+                  if (publicClient && executeConfig?.request) {
+                    setIsSending(true);
+                    wrapWithToast(async () => await executeSubmissions(executeConfig.request), publicClient).finally(
+                      () => setIsSending(false)
+                    );
+                  }
+                }}
+              />
+            </EnsureChain>
+          )}
         </WrapWithCountdown>
       ) : null}
     </>

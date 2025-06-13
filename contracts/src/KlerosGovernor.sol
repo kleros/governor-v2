@@ -134,6 +134,7 @@ contract KlerosGovernor is IArbitrableV2 {
         executionTimeout = _executionTimeout;
         withdrawTimeout = _withdrawTimeout;
         sessions.push();
+        submissions.push();
 
         templateRegistry = _templateRegistry;
         templateId = IDisputeTemplateRegistry(templateRegistry).setDisputeTemplate(

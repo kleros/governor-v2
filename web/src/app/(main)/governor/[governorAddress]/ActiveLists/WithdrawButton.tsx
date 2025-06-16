@@ -39,7 +39,7 @@ const WithdrawButton: React.FC<IWithdrawButton> = ({ listHash, listId, governorA
     isError,
   } = useSimulateWithdrawTransactionList({
     query: {
-      enabled: address === submitter || isUndefined(submissionId),
+      enabled: address === submitter && !isUndefined(submissionId),
     },
     address: governorAddress,
     args: [submissionId ?? BigInt(0), listHash],

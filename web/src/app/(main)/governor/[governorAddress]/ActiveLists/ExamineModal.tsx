@@ -20,7 +20,7 @@ interface IExamineModal {
 
 const ExamineModal: React.FC<IExamineModal> = ({ isOpen, toggleIsOpen, list, governorAddress }) => {
   const ActionButton = useMemo(() => {
-    if (list.txs.every((tx) => tx.executed)) return null;
+    if (list.txs.length > 0 && list.txs.every((tx) => tx.executed)) return null;
     else if (list.approved) return <ExecuteListButton {...list} {...{ governorAddress }} />;
     return <WithdrawButton {...list} {...{ governorAddress }} />;
   }, [list, governorAddress]);

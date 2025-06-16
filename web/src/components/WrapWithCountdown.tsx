@@ -21,7 +21,10 @@ const WrapWithCountdown: React.FC<IWrapWithCountdown> = ({ children, text, ...pr
       }
       return (
         <span className="text-klerosUIComponentsSecondaryText text-sm">
-          {prefix} {hours ? `${hours}h` : null} {minutes ? `${minutes}m` : null} {seconds}s {suffix}
+          {prefix && `${prefix} `}
+          {hours > 0 && `${hours}h `}
+          {minutes > 0 && `${minutes}m `}
+          {seconds}s {suffix && ` ${suffix}`}
         </span>
       );
     }

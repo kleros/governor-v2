@@ -28,7 +28,7 @@ const ListCard: React.FC<IListCard> = ({ list, governorAddress }) => {
   const [isOpen, toggleIsOpen] = useToggle(false);
 
   const status = useMemo(() => {
-    if (list.txs.every((tx) => tx.executed)) return ListStatus.Executed;
+    if (list.txs.length > 0 && list.txs.every((tx) => tx.executed)) return ListStatus.Executed;
     else if (list.approved) return ListStatus.Approved;
     return ListStatus.Submitted;
   }, [list]);

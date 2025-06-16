@@ -21,7 +21,7 @@ export const templateFn = (arbitratorAddress: string, arbitrableChainID: number)
 
     ],
   "policyURI": "/ipfs/QmPt2oTHCYZYUShuLxiK4QWH6sXPHjvgXTqMDpCShKogQY/KlerosGovernorPrimaryDocument.pdf",
-  "frontendUrl": "https://governor-v2.kleros.builders/governor/{{arbitrable}}",
+  "frontendUrl": "https://governor-v2.kleros.builders/governor/{{arbitrableAddress}}",
   "arbitratorChainID": "${arbitrableChainID}",
   "arbitratorAddress": "${arbitratorAddress}",
   "category": "Kleros Governor",

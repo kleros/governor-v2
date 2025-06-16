@@ -3,7 +3,7 @@ import { parse, join } from "path";
 
 import { type Config, type ContractConfig, defineConfig } from "@wagmi/cli";
 import dotenv from "dotenv";
-import { type Chain } from "wagmi/chains";
+import { type Chain } from "viem";
 
 dotenv.config();
 

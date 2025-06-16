@@ -54,7 +54,7 @@ interface IAccordionTitle extends Submission {
 
 const AccordionTitle: React.FC<IAccordionTitle> = ({ submitter, submissionTime, numberOfTxns, approved, txs }) => {
   const status = useMemo(() => {
-    if (txs.every((tx) => tx.executed)) return ListStatus.Executed;
+    if (txs.length > 0 && txs.every((tx) => tx.executed)) return ListStatus.Executed;
     else if (approved) return ListStatus.Approved;
     return ListStatus.Submitted;
   }, [approved, txs]);

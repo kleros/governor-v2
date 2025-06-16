@@ -24,13 +24,15 @@ interface IAccordionBody {
 const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
   const { id: listId, transactions } = list;
   const [isOpen, toggleIsOpen] = useToggle(false);
-  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number]>(transactions?.[0]);
+  const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number] | undefined>(transactions?.[0]);
   const { governorAddress, updateTransactions, deleteList } = useLists();
 
   // select the latest txn, when new txn added
   useEffect(() => {
-    if (transactions.length) {
+    if (transactions.length > 0) {
       setSelectedTxn(transactions[transactions.length - 1]);
+    } else {
+      setSelectedTxn(undefined);
     }
   }, [transactions]);
 
@@ -54,7 +56,7 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
           <DraggableList
             className="border-none flex-1 size-full bg-klerosUIComponentsWhiteBackground max-md:pb-14"
             disallowEmptySelection
-            selectedKeys={[selectedTxn?.id]}
+            selectedKeys={selectedTxn ? [selectedTxn.id] : []}
             items={transactions.map((txn) => ({ name: txn.name, id: txn.id, value: txn }))}
             selectionCallback={(selected) => {
               setSelectedTxn(selected.value);

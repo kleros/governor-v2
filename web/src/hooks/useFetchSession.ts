@@ -19,6 +19,7 @@ export const useFetchSession = (address: Address, previousSession = false) => {
 
   const sessionNumber = useMemo(() => {
     if (isUndefined(currentSessionNumber)) return BigInt(0);
+    if (previousSession && currentSessionNumber === BigInt(0)) return null;
     return previousSession ? currentSessionNumber - BigInt(1) : currentSessionNumber;
   }, [currentSessionNumber, previousSession]);
 
@@ -28,7 +29,7 @@ export const useFetchSession = (address: Address, previousSession = false) => {
       enabled: !isUndefined(currentSessionNumber),
     },
     chainId: DEFAULT_CHAIN.id,
-    args: [sessionNumber],
+    args: [sessionNumber ?? BigInt(0)],
     address,
   });
 };

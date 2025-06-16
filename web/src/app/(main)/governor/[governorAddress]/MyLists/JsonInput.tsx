@@ -156,8 +156,8 @@ const JSONInput: React.FC = () => {
 
       {selectedFunction && (
         <div className="space-y-4">
-          <TextField name="functionName" value={selectedFunction.name} className="hidden" />
-          <TextField name="functionABI" value={JSON.stringify(selectedFunction)} className="hidden" />
+          <TextField key="functionName" name="functionName" value={selectedFunction.name} className="hidden" />
+          <TextField key="functionABI" name="functionABI" value={JSON.stringify(selectedFunction)} className="hidden" />
           <h3 className="text-md  text-klerosUIComponentsPrimaryText font-medium">{selectedFunction.name}</h3>
           {selectedFunction.inputs.map((input) =>
             renderInputField(input, `function.${selectedFunction.name}.${input.name}`)

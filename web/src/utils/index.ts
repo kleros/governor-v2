@@ -36,6 +36,5 @@ const getIntlOption = (time: boolean, day: boolean): Intl.DateTimeFormatOptions 
   return { month: "long", day: "2-digit", year: "numeric" };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isUndefined = (maybeObject: any): maybeObject is undefined | null =>
+export const isUndefined = <T>(maybeObject: T | undefined | null): maybeObject is undefined | null =>
   typeof maybeObject === "undefined" || maybeObject === null;

@@ -11,6 +11,7 @@ import { isUndefined } from "@/utils";
 import { flattenToNested, formatFunctionCall } from "@/utils/txnBuilder/format";
 import { buildArgs } from "@/utils/txnBuilder/parsing";
 import { validateInputValue } from "@/utils/txnBuilder/validation";
+import { errorToast } from "@/utils/wrapWithToast";
 
 import JSONInput from "./JsonInput";
 
@@ -79,7 +80,8 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
 
       toggleIsOpen();
     } catch (error) {
-      console.log({ error });
+      console.error("Failed to add transaction:", error);
+      errorToast("Failed to add transaction. Please check your inputs and try again.");
     }
   };
   return (

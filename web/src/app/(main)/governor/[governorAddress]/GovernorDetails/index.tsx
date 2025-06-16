@@ -35,7 +35,7 @@ const GovernorDetailsCard: React.FC<Governor> = ({ address, chain, Logo, ChainIc
               <Link
                 href={`https://snapshot.org/#/${snapshotSlug}`}
                 target="_blank"
-                rel="noreferrer nooppener"
+                rel="noreferrer noopener"
                 className="text-klerosUIComponentsPrimaryBlue"
               >
                 Snapshot

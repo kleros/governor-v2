@@ -1,6 +1,6 @@
 import { Address } from "viem";
 
-import { ListTransaction } from "@/context/ListsContext";
+import { ListTransaction } from "@/context/NewListsContext";
 
 import { isUndefined } from "..";
 

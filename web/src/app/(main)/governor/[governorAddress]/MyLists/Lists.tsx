@@ -5,7 +5,7 @@ import { Button, Card, CustomAccordion, DraggableList } from "@kleros/ui-compone
 import clsx from "clsx";
 import { useToggle } from "react-use";
 
-import { List, useLists } from "@/context/ListsContext";
+import { List, useLists } from "@/context/NewListsContext";
 
 import ExternalLink from "@/components/ExternalLink";
 import DisplayCard from "@/components/ListDisplayCard";

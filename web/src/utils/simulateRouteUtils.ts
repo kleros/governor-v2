@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { Address } from "viem";
 
-import { ListTransaction } from "@/context/ListsContext";
+import { ListTransaction } from "@/context/NewListsContext";
 
 const RATE_LIMIT = 10;
 const RATE_LIMIT_WINDOW = 60 * 1000;

@@ -6,7 +6,7 @@ import { Address } from "viem";
 
 import { usePublicClient } from "wagmi";
 
-import { List, useLists } from "@/context/LIstsContext";
+import { List, useLists } from "@/context/ListsContext";
 import { useSimulateSubmitList, useWriteSubmitList } from "@/hooks/useGovernor";
 import { useSubmissionFee } from "@/hooks/useSubmissionFee";
 

@@ -5,7 +5,7 @@ import { BigNumberField, Button, Form, Modal, Radio, TextArea, TextField } from 
 import clsx from "clsx";
 import { type Abi, type AbiFunction, Address, encodeFunctionData, parseEther } from "viem";
 
-import { ListTransaction, useLists } from "@/context/LIstsContext";
+import { ListTransaction, useLists } from "@/context/ListsContext";
 
 import { isUndefined } from "@/utils";
 import { flattenToNested, formatFunctionCall } from "@/utils/txnBuilder/format";

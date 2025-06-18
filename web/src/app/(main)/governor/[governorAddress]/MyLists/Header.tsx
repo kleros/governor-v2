@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@kleros/ui-components-library";
 
-import { useLists } from "@/context/LIstsContext";
+import { useLists } from "@/context/ListsContext";
 
 import Paper from "@/assets/svgs/icons/paper.svg";
 

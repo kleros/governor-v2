@@ -119,7 +119,7 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
           <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
         </div>
 
-        <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} />
+        {isOpen ? <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} /> : null}
       </div>
     </div>
   );

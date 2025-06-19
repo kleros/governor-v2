@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAddress } from "viem";
 
 import { isUndefined } from "@/utils";
 import { checkRateLimit } from "@/utils/simulateRouteUtils";
@@ -25,6 +26,10 @@ export async function GET(request: NextRequest) {
 
   if (!networkId || !contractAddress) {
     return NextResponse.json({ error: "Missing required parameters: networkId and contractAddress" }, { status: 400 });
+  }
+
+  if (!isAddress(contractAddress)) {
+    return NextResponse.json({ error: "Invalid contract address format" }, { status: 400 });
   }
 
   try {
@@ -78,7 +83,7 @@ async function tryEtherscanFallback(networkId: string, contractAddress: string) 
     const etherscanApiKey = process.env.ETHERSCAN_API_KEY;
 
     if (isUndefined(etherscanApiKey)) {
-      return NextResponse.json({ error: "Arbiscan API key not configured" }, { status: 500 });
+      return NextResponse.json({ error: "Etherscan API key not configured" }, { status: 500 });
     }
 
     const baseUrl = "https://api.etherscan.io/v2/api";

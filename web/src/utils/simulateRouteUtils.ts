@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import { Address } from "viem";
 
 import { ListTransaction } from "@/context/NewListsContext";
@@ -29,39 +28,6 @@ export function validateRequestBody(body: unknown): body is SimulateRequestBody 
       return typeof typedTx.to === "string" && typeof typedTx.data === "string" && typeof typedTx.txnValue === "string";
     })
   );
-}
-
-// check if the request is from our frontend
-export function isValidOrigin(): boolean {
-  const headersList = headers();
-  const origin = headersList.get("origin");
-  const referer = headersList.get("referer");
-
-  const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : [];
-
-  if (origin) {
-    for (const pattern of allowedOrigins) {
-      if (pattern.includes("*")) {
-        const regex = new RegExp(`^${pattern.replace(/\*/g, ".*")}$`);
-        if (regex.test(origin)) return true;
-      } else if (origin === pattern) {
-        return true;
-      }
-    }
-  }
-
-  if (referer) {
-    for (const pattern of allowedOrigins) {
-      if (pattern.includes("*")) {
-        const regex = new RegExp(`^${pattern.replace(/\*/g, ".*")}`);
-        if (regex.test(referer)) return true;
-      } else if (referer.startsWith(pattern)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
 }
 
 // implement rate limiting

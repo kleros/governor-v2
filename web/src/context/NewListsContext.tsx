@@ -75,6 +75,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
       try {
         const simulationResult = await fetch("/api/simulate", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             networkId: DEFAULT_CHAIN.id,
             governorAddress,

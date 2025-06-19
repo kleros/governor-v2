@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { isUndefined } from "@/utils";
-import { checkRateLimit, isValidOrigin, SimulateRequestBody, validateRequestBody } from "@/utils/simulateRouteUtils";
+import { checkRateLimit, SimulateRequestBody, validateRequestBody } from "@/utils/simulateRouteUtils";
 import { simulateWithTenderly } from "@/utils/tenderly/simulateWithTenderly";
 
 export async function POST(request: NextRequest) {
@@ -16,15 +16,10 @@ export async function POST(request: NextRequest) {
       {
         status: 429,
         headers: {
-          "Retry-After": Math.ceil((rateLimitCheck.resetTime || 0 - Date.now()) / 1000).toString(),
+          "Retry-After": Math.ceil(((rateLimitCheck.resetTime ?? 0) - Date.now()) / 1000).toString(),
         },
       }
     );
-  }
-
-  // Check if request is from our frontend
-  if (!isValidOrigin()) {
-    return NextResponse.json({ error: "Unauthorized origin" }, { status: 403 });
   }
 
   // Parse and validate request body

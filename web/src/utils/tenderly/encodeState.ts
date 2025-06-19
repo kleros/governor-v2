@@ -4,6 +4,8 @@ import { ListTransaction } from "@/context/NewListsContext";
 
 import { isUndefined } from "..";
 
+type EncodeStateOverride = { stateOverrides: Record<Address, { value: Record<string, string> }> };
+
 export const encodeStateOverride = async (
   networkId: number,
   governorAddress: Address,
@@ -36,7 +38,7 @@ export const encodeStateOverride = async (
 
   const result = await res.json();
 
-  return result;
+  return result as EncodeStateOverride;
 };
 
 export const buildTenderlyEncodeStateBody = (

@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { BigNumberField, Button, Form, Modal, Radio, TextArea, TextField } from "@kleros/ui-components-library";
 import clsx from "clsx";
 import { type Abi, type AbiFunction, Address, encodeFunctionData, parseEther } from "viem";
 
 import { ListTransaction, useLists } from "@/context/NewListsContext";
+import { useContractInfo } from "@/hooks/useContractInfo";
 
 import { isUndefined } from "@/utils";
 import { flattenToNested, formatFunctionCall } from "@/utils/txnBuilder/format";
@@ -28,7 +29,20 @@ interface IAddTxnModal {
 const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) => {
   const [inputType, setInputType] = useState(InputType.DataInput);
   const [txnValue, setTxnValue] = useState("0");
+  const [contractAddress, setContractAddress] = useState<Address>();
   const { addTxnToList } = useLists();
+  const { data: contractInfo, isLoading: isLoadingContractInfo } = useContractInfo(contractAddress);
+
+  const { addressInputVariant, addressInputMessage } = useMemo(() => {
+    if (isLoadingContractInfo)
+      return { addressInputVariant: "info" as const, addressInputMessage: "Fetching contract details" };
+    if (contractInfo?.abi)
+      return {
+        addressInputVariant: "success" as const,
+        addressInputMessage: contractInfo?.name ?? "Verified contract",
+      };
+    return { addressInputVariant: undefined };
+  }, [contractInfo, isLoadingContractInfo]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -116,6 +130,9 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
           validate={(val) => validateInputValue(val, { type: "address" })}
           label="Contract Address"
           isRequired
+          variant={addressInputVariant}
+          message={addressInputMessage}
+          onChange={(val) => setContractAddress(val as Address)}
         />
         <BigNumberField
           name="value"
@@ -153,7 +170,7 @@ const AddTxnModal: React.FC<IAddTxnModal> = ({ listId, isOpen, toggleIsOpen }) =
             validate={(val) => validateInputValue(val, { type: "bytes" })}
           />
         ) : (
-          <JSONInput />
+          <JSONInput abi={contractInfo?.abi} />
         )}
         <Button text="Submit" type="submit" className="self-end mt-2" />
       </Form>

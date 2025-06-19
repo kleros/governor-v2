@@ -39,6 +39,7 @@ interface IListsContext {
   simulateList: (listId: string) => Promise<{ status: boolean; simulationLink?: string }>;
   isSimulating: boolean;
   governorAddress: Address;
+  simulations: Map<string, string>;
 }
 
 const ListsContext = createContext<IListsContext | undefined>(undefined);
@@ -63,6 +64,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
 
   const [listsArr, setListsArr] = useLocalStorage<[string, List][]>(`${governorAddress}-lists`, []);
   const lists = useMemo(() => new Map(listsArr), [listsArr]);
+  const simulations = useMemo(() => new Map<string, string>(), []);
 
   const simulateList = useCallback(
     async (listId: string) => {
@@ -84,7 +86,10 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
           const errorText = await simulationResult.text();
           throw new Error(`Sharing simulation failed: ${simulationResult.status} ${errorText}`);
         } else {
-          return simulationResult.json();
+          const res = await simulationResult.json();
+
+          simulations.set(listId, res.simulationLink);
+          return res;
         }
       } catch (error) {
         console.log(error instanceof Error ? error.message : `Simulation Failed`);
@@ -176,6 +181,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
       deleteList,
       simulateList,
       isSimulating,
+      simulations,
     }),
     [
       lists,
@@ -187,6 +193,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, governor
       deleteList,
       simulateList,
       isSimulating,
+      simulations,
     ]
   );
 

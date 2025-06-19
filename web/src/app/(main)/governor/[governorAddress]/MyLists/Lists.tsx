@@ -26,9 +26,10 @@ interface IAccordionBody {
 const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
   const { id: listId, transactions } = list;
   const [isOpen, toggleIsOpen] = useToggle(false);
-  const [simulationShareLink, setSimulationShareLink] = useState<string>();
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number] | undefined>(transactions?.[0]);
-  const { governorAddress, updateTransactions, deleteList, simulateList, isSimulating } = useLists();
+  const { governorAddress, updateTransactions, deleteList, simulateList, isSimulating, simulations } = useLists();
+
+  const simulationShareLink = simulations.get(listId);
 
   // select the latest txn, when new txn added
   useEffect(() => {
@@ -40,11 +41,7 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
   }, [transactions]);
 
   const simulate = () => {
-    simulateList(listId).then(({ status, simulationLink }) => {
-      if (status && !isUndefined(simulationLink)) {
-        setSimulationShareLink(simulationLink);
-      }
-    });
+    simulateList(listId);
   };
   return (
     <div className="w-full pt-2 lg:px-6 flex flex-col justify-end items-end">

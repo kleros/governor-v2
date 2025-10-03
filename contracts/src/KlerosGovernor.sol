@@ -4,6 +4,7 @@ pragma solidity 0.8.24;
 
 import {IArbitrableV2, IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
 import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
+import "./interfaces/IArbSys.sol";
 
 /// @title KlerosGovernor for V2. Note that appeal functionality and evidence submission will be handled by the court.
 contract KlerosGovernor is IArbitrableV2 {
@@ -23,7 +24,6 @@ contract KlerosGovernor is IArbitrableV2 {
         uint256[] submittedLists; // Tracks all lists that were submitted in a session in the form submittedLists[submissionID].
         uint256 sumDeposit; // Sum of all submission deposits in a session (minus arbitration fees). This is used to calculate the reward.
         Status status; // Status of a session.
-        mapping(bytes32 listHash => bool) alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[listHash].
         uint256 durationOffset; // Time in seconds that prolongs the submission period after the first submission, to give other submitters time to react.
     }
 
@@ -42,8 +42,10 @@ contract KlerosGovernor is IArbitrableV2 {
         uint256 submissionTime; // The time when the list was submitted.
         bool approved; // Whether the list was approved for execution or not.
         uint256 approvalTime; // The time when the list was approved.
+        uint256 submissionBlock; // Block of list submission.
     }
 
+    ArbSys constant arbSys = ArbSys(address(100)); // ArbSys implementation https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference#arbsys
     IArbitratorV2 public arbitrator; // Arbitrator contract.
     bytes public arbitratorExtraData; // Extra data for arbitrator.
     IDisputeTemplateRegistry public templateRegistry; // The dispute template registry.
@@ -59,7 +61,7 @@ contract KlerosGovernor is IArbitrableV2 {
 
     Submission[] public submissions; // Stores all created transaction lists. submissions[_listID].
     Session[] public sessions; // Stores all submitting sessions. sessions[_session].
-
+    mapping(uint256 sessionIndex => mapping(bytes32 listHash => bool)) alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[listHash].
     // ************************************* //
     // *        Function Modifiers         * //
     // ************************************* //
@@ -132,6 +134,7 @@ contract KlerosGovernor is IArbitrableV2 {
         executionTimeout = _executionTimeout;
         withdrawTimeout = _withdrawTimeout;
         sessions.push();
+        submissions.push();
 
         templateRegistry = _templateRegistry;
         templateId = IDisputeTemplateRegistry(templateRegistry).setDisputeTemplate(
@@ -213,6 +216,10 @@ contract KlerosGovernor is IArbitrableV2 {
         Session storage session = sessions[sessions.length - 1];
         Submission storage submission = submissions.push();
         submission.submitter = payable(msg.sender);
+
+        // https://docs.arbitrum.io/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time
+        submission.submissionBlock = arbSys.arbBlockNumber();
+
         // Do the assignment first to avoid creating a new variable and bypass a 'stack too deep' error.
         submission.deposit = submissionBaseDeposit + arbitrator.arbitrationCost(arbitratorExtraData);
         require(msg.value >= submission.deposit, "Not enough ETH to cover deposit");
@@ -233,8 +240,8 @@ contract KlerosGovernor is IArbitrableV2 {
             currentTxHash = keccak256(abi.encodePacked(transaction.target, transaction.value, transaction.data));
             listHash = keccak256(abi.encodePacked(currentTxHash, listHash));
         }
-        require(!session.alreadySubmitted[listHash], "List already submitted");
-        session.alreadySubmitted[listHash] = true;
+        require(!alreadySubmitted[sessions.length - 1][listHash], "List already submitted");
+        alreadySubmitted[sessions.length - 1][listHash] = true;
         submission.listHash = listHash;
         submission.submissionTime = block.timestamp;
         session.sumDeposit += submission.deposit;
@@ -251,7 +258,7 @@ contract KlerosGovernor is IArbitrableV2 {
 
     /// @dev Withdraws submitted transaction list. Reimburses submission deposit.
     /// Withdrawal is only possible during the first half of the submission period and during withdrawTimeout after the submission is made.
-    /// @param _submissionID Submission's index in the array of submitted lists of the current sesssion.
+    /// @param _submissionID Submission's index in the array of submitted lists of the current session.
     /// @param _listHash Hash of a withdrawing list.
     function withdrawTransactionList(uint256 _submissionID, bytes32 _listHash) external {
         Session storage session = sessions[sessions.length - 1];
@@ -262,7 +269,7 @@ contract KlerosGovernor is IArbitrableV2 {
         require(submission.submitter == msg.sender, "Only submitter can withdraw");
         require(block.timestamp - submission.submissionTime <= withdrawTimeout, "Withdrawing time has passed.");
         session.submittedLists[_submissionID] = session.submittedLists[session.submittedLists.length - 1];
-        session.alreadySubmitted[_listHash] = false;
+        alreadySubmitted[sessions.length - 1][_listHash] = false;
         session.submittedLists.pop();
         session.sumDeposit -= submission.deposit;
         reservedETH -= submission.deposit;
@@ -388,6 +395,13 @@ contract KlerosGovernor is IArbitrableV2 {
         submittedLists = session.submittedLists;
     }
 
+    /// @dev Gets the submission from listId.
+    /// @param _listId The index of the transaction list in the array of lists.
+    /// @return submission List belonging to that listId.
+    function getSubmission(uint256 _listId) external view returns (Submission memory submission) {
+        submission = submissions[_listId];
+    }
+
     /// @dev Gets the number of transactions in the list.
     /// @param _listID The index of the transaction list in the array of lists.
     /// @return txCount The number of transactions in the list.
@@ -406,5 +420,17 @@ contract KlerosGovernor is IArbitrableV2 {
     /// @return The number of the ongoing session.
     function getCurrentSessionNumber() external view returns (uint256) {
         return sessions.length - 1;
+    }
+
+    /// @dev Gets the session from the session index.
+    /// @return _session The session info.
+    function getSession(uint256 _sessionIndex) external view returns (Session memory _session) {
+        _session = sessions[_sessionIndex];
+    }
+
+    /// @dev Gets the total deposit required to submit a list. (submissionBaseDeposit + arbitrationCost).
+    /// @return _requiredDeposit required deposit value
+    function getTotalSubmissionDeposit() external view returns (uint256 _requiredDeposit) {
+        _requiredDeposit = submissionBaseDeposit + arbitrator.arbitrationCost(arbitratorExtraData);
     }
 }

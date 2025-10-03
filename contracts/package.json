@@ -81,12 +81,15 @@
     "hardhat-watcher": "^2.5.0",
     "pino": "^8.17.0",
     "pino-pretty": "^10.2.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-solidity": "^2.0.0",
     "solidity-coverage": "^0.8.14",
     "ts-node": "^10.9.2",
     "typechain": "^8.3.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wagmi": "^2.15.4"
   },
   "dependencies": {
-    "@kleros/kleros-v2-contracts": "^0.7.0"
+    "@kleros/kleros-v2-contracts": "^0.9.3"
   }
 }

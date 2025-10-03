@@ -1,4 +1,4 @@
-import { Contract } from "@ethersproject/contracts";
+import { BaseContract } from "ethers";
 import { DeployOptions } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
@@ -6,7 +6,7 @@ export const getContractOrDeploy = async (
   hre: HardhatRuntimeEnvironment,
   contractName: string,
   options: DeployOptions
-): Promise<Contract> => {
+): Promise<BaseContract> => {
   let contract = await hre.ethers.getContractOrNull(contractName);
   if (!contract) {
     console.log(`contract ${contractName} not deployed, deploying now...`);

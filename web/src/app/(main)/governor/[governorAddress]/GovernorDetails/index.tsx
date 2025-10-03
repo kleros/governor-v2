@@ -1,13 +1,14 @@
 import clsx from "clsx";
+import Link from "next/link";
 
-import Calendar from "@/assets/svgs/icons/calendar.svg";
 import Snapshot from "@/assets/svgs/icons/snapshot.svg";
 
 import { Governor } from "@/consts/governors";
 
 import AddressLink from "./AddressLink";
+import SessionInfo from "./SessionInfo";
 
-const GovernorDetailsCard: React.FC<Governor> = ({ address, chain, Logo, ChainIcon }) => {
+const GovernorDetailsCard: React.FC<Governor> = ({ address, chain, Logo, ChainIcon, snapshotSlug }) => {
   return (
     <div className="w-full">
       <div className="h-1.25 rounded-t-base bg-klerosUIComponentsPrimaryBlue  w-full" />
@@ -29,14 +30,19 @@ const GovernorDetailsCard: React.FC<Governor> = ({ address, chain, Logo, ChainIc
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <div className="flex gap-2 items-start md:items-center">
             <Snapshot className="size-4 shrink-0" />
-            <small className="text-sm text-klerosUIComponentsSecondaryText">Governor decisions from Snapshot</small>
-          </div>
-          <div className="flex gap-2 items-start md:items-center">
-            <Calendar className="size-4 shrink-0" />
             <small className="text-sm text-klerosUIComponentsSecondaryText">
-              Session: Votes approved before Feb 07, 2025 - 16h 37m
+              Governor decisions from{" "}
+              <Link
+                href={`https://snapshot.org/#/${snapshotSlug}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-klerosUIComponentsPrimaryBlue"
+              >
+                Snapshot
+              </Link>
             </small>
           </div>
+          <SessionInfo {...{ address }} />
         </div>
       </div>
     </div>

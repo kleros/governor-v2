@@ -1,4 +1,6 @@
-import { gnosis, mainnet, type Chain } from "@reown/appkit/networks";
+import { Address } from "viem";
+
+import { arbitrumSepolia, gnosis, mainnet, type Chain } from "@reown/appkit/networks";
 
 import KlerosLogo from "@/assets/svgs/logos/kleros.svg";
 import PohLogo from "@/assets/svgs/logos/poh.svg";
@@ -7,19 +9,21 @@ import Gnosis from "@/assets/svgs/tokens/gnosis.svg";
 
 export type Governor = {
   name: string;
-  address: string;
+  address: Address;
   Logo: React.FC<React.SVGProps<SVGElement>>;
   chain: Chain;
   ChainIcon: React.FC<React.SVGProps<SVGElement>>;
+  snapshotSlug: string;
 };
 
 export const governors: Governor[] = [
   {
-    name: "Kleros V1",
-    address: "0xbe8d95497E53aB41d5A45CC8def90d0e59b49f99",
+    name: "Kleros V2",
+    address: "0x5a6dAe69c24FFDc67d47C08F7b19b71793779F1a",
     Logo: KlerosLogo,
-    chain: mainnet,
+    chain: arbitrumSepolia,
     ChainIcon: ETH,
+    snapshotSlug: "kleros",
   },
   {
     name: "Kleros V2",
@@ -27,6 +31,7 @@ export const governors: Governor[] = [
     Logo: KlerosLogo,
     chain: gnosis,
     ChainIcon: Gnosis,
+    snapshotSlug: "kleros",
   },
   {
     name: "Proof of Humanity  V1",
@@ -34,6 +39,7 @@ export const governors: Governor[] = [
     Logo: PohLogo,
     chain: mainnet,
     ChainIcon: ETH,
+    snapshotSlug: "kleros",
   },
 ];
 

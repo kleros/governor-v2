@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn generate && next dev",
     "build-netlify": "yarn generate && next build",
     "build-devnet": "scripts/runEnv.sh devnet 'yarn generate && next build'",
     "start-local": "scripts/runEnv.sh local 'yarn generate && yarn dev'",
@@ -15,26 +15,27 @@
   "prettier": "@kleros/governor-v2-prettier-config",
   "dependencies": {
     "@kleros/kleros-v2-contracts": "^0.7.0",
-    "@kleros/ui-components-library": "^3.3.4",
-    "@reown/appkit": "^1.6.9",
-    "@reown/appkit-adapter-wagmi": "^1.6.9",
+    "@kleros/ui-components-library": "^3.4.5",
+    "@reown/appkit": "^1.7.7",
+    "@reown/appkit-adapter-wagmi": "^1.7.7",
     "@tailwindcss/postcss": "^4.1.7",
     "@tanstack/react-query": "^5.67.1",
-    "@wagmi/chains": "^1.8.0",
     "@wagmi/cli": "^2.2.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "next": "14.2.27",
     "postcss": "^8.5.3",
     "react": "18.3.0",
+    "react-countdown": "^2.3.6",
     "react-dom": "18.3.0",
     "react-identicons": "^1.2.5",
+    "react-toastify": "^11.0.5",
     "react-use": "^17.6.0",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-react-aria-components": "^2.0.0",
-    "viem": "^2.23.6",
-    "wagmi": "^2.14.12"
+    "viem": "^2.30.5",
+    "wagmi": "^2.15.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -46,6 +47,7 @@
     "@types/react-dom": "18.3.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.8",
-    "typescript": "^5"
+    "eslint-config-prettier": "^10.1.5",
+    "typescript": "^5.8.3"
   }
 }

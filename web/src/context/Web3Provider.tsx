@@ -8,8 +8,9 @@ import { arbitrum, arbitrumSepolia } from "@reown/appkit/networks";
 import { createAppKit } from "@reown/appkit/react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 
-import { isProductionDeployment, SUPPORTED_CHAINS } from "@/consts";
 import { projectId, wagmiAdapter } from "@/web3Config";
+
+import { isProductionDeployment, SUPPORTED_CHAINS } from "@/consts";
 
 const queryClient = new QueryClient();
 

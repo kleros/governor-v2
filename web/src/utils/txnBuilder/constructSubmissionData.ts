@@ -1,6 +1,6 @@
 import { Address, Hex } from "viem";
 
-import { ListTransaction } from "@/context/LIstsContext";
+import { ListTransaction } from "@/context/NewListsContext";
 
 export const constructSubmissionData = (transactions: ListTransaction[]) => {
   const addresses: Address[] = [];

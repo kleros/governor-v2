@@ -2,7 +2,7 @@
 
 import { Address } from "viem";
 
-import { ListsProvider } from "@/context/LIstsContext";
+import { ListsProvider } from "@/context/NewListsContext";
 
 import Header from "./Header";
 import Lists from "./Lists";

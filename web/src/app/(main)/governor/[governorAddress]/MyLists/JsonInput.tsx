@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BigNumberField, DropdownSelect, TextArea, TextField } from "@kleros/ui-components-library";
 import clsx from "clsx";
 import type { Abi, AbiFunction } from "viem";
 
+import { isUndefined } from "@/utils";
 import { getDefaultPlaceholder, mapSolidityToInputType } from "@/utils/txnBuilder/format";
 import { TupleInput } from "@/utils/txnBuilder/parsing";
 import { validateInputValue } from "@/utils/txnBuilder/validation";
@@ -84,12 +85,16 @@ function renderInputField(input: TupleInput, path: string): JSX.Element {
   );
 }
 
-const JSONInput: React.FC = () => {
+const JSONInput: React.FC<{ abi?: Abi }> = ({ abi }) => {
   const [abiInput, setAbiInput] = useState<string>("");
   const [functions, setFunctions] = useState<AbiFunction[]>([]);
   const [selectedFunction, setSelectedFunction] = useState<AbiFunction | null>(null);
 
   const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    if (!isUndefined(abi)) handleAbiChange(JSON.stringify(abi));
+  }, [abi]);
 
   const handleAbiChange = (val: string) => {
     setAbiInput(val);

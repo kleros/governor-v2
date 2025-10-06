@@ -90,6 +90,6 @@
     "wagmi": "^2.15.4"
   },
   "dependencies": {
-    "@kleros/kleros-v2-contracts": "^0.9.3"
+    "@kleros/kleros-v2-contracts": "^0.12.0"
   }
 }

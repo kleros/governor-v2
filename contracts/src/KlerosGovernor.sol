@@ -2,10 +2,13 @@
 
 pragma solidity ^0.8.24;
 
-import {IArbitrableV2, IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
-import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
+import {IArbitrableV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
+import {IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitratorV2.sol";
+import {
+    IDisputeTemplateRegistry
+} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
 import {SafeSend} from "./libraries/SafeSend.sol";
-import "./interfaces/IArbSys.sol";
+import {ArbSys} from "./interfaces/IArbSys.sol";
 
 /// @title KlerosGovernor for V2.
 /// @dev Appeal and evidence submission is handled by the court.
@@ -318,7 +321,7 @@ contract KlerosGovernor is IArbitrableV2 {
             // Check in case arbitration cost increased after the submission. It's unlikely that its increase won't be covered by the base deposit, but technically possible.
             session.sumDeposit = session.sumDeposit > arbitrationCost ? session.sumDeposit - arbitrationCost : 0;
             reservedETH = reservedETH > arbitrationCost ? reservedETH - arbitrationCost : 0;
-            emit DisputeRequest(arbitrator, session.disputeID, sessions.length - 1, templateId);
+            emit DisputeRequest(arbitrator, session.disputeID, templateId);
         }
     }
 

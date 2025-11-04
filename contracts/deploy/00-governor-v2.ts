@@ -18,6 +18,8 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const chainId = Number(await getChainId());
   console.log("deploying to %s with deployer %s", HomeChains[chainId], deployer);
 
+  const wNative = await ethers.getContract("WETH");
+
   const { disputeTemplateRegistry, klerosCore } = await getArbitratorContracts(hre);
   const disputeTemplate = templateFn(klerosCore.target.toString(), chainId);
 
@@ -26,7 +28,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     log: true,
   });
 
-  const governorFactory = (await ethers.getContract("GovernorFactory")) as GovernorFactory;
+  const governorFactory = await ethers.getContract<GovernorFactory>("GovernorFactory");
   await governorFactory.deploy(
     klerosCore.target,
     extraData,
@@ -36,7 +38,8 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     0,
     600,
     600,
-    600 // feeTimeout: 10 minutes
+    600, // feeTimeout: 10 minutes
+    wNative.target
   );
 
   await deploy("KlerosGovernor", {
@@ -51,6 +54,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
       600,
       600,
       600, // feeTimeout: 10 minutes
+      wNative.target,
     ],
     log: true,
   });

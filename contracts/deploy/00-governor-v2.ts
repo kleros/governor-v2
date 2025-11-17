@@ -10,7 +10,7 @@ const extraData =
   "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  const { deployments, getNamedAccounts, getChainId, ethers } = hre;
+  const { deployments, getNamedAccounts, getChainId, ethers, network } = hre;
   const { deploy } = deployments;
 
   // fallback to hardhat node signers on local network
@@ -23,13 +23,14 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { disputeTemplateRegistry, klerosCore } = await getArbitratorContracts(hre);
   const disputeTemplate = templateFn(klerosCore.target.toString(), chainId);
 
-  await deploy("GovernorFactory", {
+  const gfDeployment = await deploy("GovernorFactory", {
     from: deployer,
     log: true,
   });
 
   const governorFactory = await ethers.getContract<GovernorFactory>("GovernorFactory");
-  await governorFactory.deploy(
+
+  const gfArgs = [
     klerosCore.target,
     extraData,
     disputeTemplateRegistry.target,
@@ -39,25 +40,56 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     600,
     600,
     600, // feeTimeout: 10 minutes
+    wNative.target,
+  ];
+
+  await governorFactory.deploy(
+    klerosCore.target,
+    extraData,
+    disputeTemplateRegistry.target,
+    disputeTemplate,
+    dataMappings,
+    0,
+    600,
+    600,
+    600, // feeTimeout: 10 minutes,
     wNative.target
   );
 
-  await deploy("KlerosGovernor", {
+  const kgArgs = gfArgs;
+  const kgDeployment = await deploy("KlerosGovernor", {
     from: deployer,
-    args: [
-      klerosCore.target,
-      extraData,
-      disputeTemplateRegistry.target,
-      disputeTemplate,
-      dataMappings,
-      0,
-      600,
-      600,
-      600, // feeTimeout: 10 minutes
-      wNative.target,
-    ],
+    args: kgArgs,
     log: true,
   });
+
+  const shouldVerify = !network.name.includes("hardhat") && !network.name.includes("localhost");
+
+  if (shouldVerify) {
+    console.log("Verifying on Etherscan…");
+
+    try {
+      // GovernorFactory
+      await hre.run("verify:verify", {
+        address: gfDeployment.address,
+        constructorArguments: [],
+      });
+      console.log(`✓ Verified GovernorFactory at ${gfDeployment.address}`);
+    } catch (err) {
+      console.warn("GovernorFactory already verified or failed:", err);
+    }
+
+    try {
+      // KlerosGovernor
+      await hre.run("verify:verify", {
+        address: kgDeployment.address,
+        constructorArguments: kgArgs,
+      });
+      console.log(`✓ Verified KlerosGovernor at ${kgDeployment.address}`);
+    } catch (err) {
+      console.warn("KlerosGovernor already verified or failed:", err);
+    }
+  }
 };
 
 deploy.tags = ["KlerosGovernor"];

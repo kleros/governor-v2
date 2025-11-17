@@ -2,6 +2,7 @@
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-chai-matchers";
+import "@nomicfoundation/hardhat-verify";
 import "@nomiclabs/hardhat-solhint";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
@@ -66,7 +67,7 @@ const config: HardhatUserConfig = {
       verify: {
         etherscan: {
           apiUrl: "https://api-sepolia.arbiscan.io",
-          apiKey: process.env.ARBISCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },
@@ -80,7 +81,7 @@ const config: HardhatUserConfig = {
       verify: {
         etherscan: {
           apiUrl: "https://api-sepolia.arbiscan.io",
-          apiKey: process.env.ARBISCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },
@@ -93,7 +94,7 @@ const config: HardhatUserConfig = {
       tags: ["production", "home", "layer2"],
       verify: {
         etherscan: {
-          apiKey: process.env.ARBISCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },
@@ -149,6 +150,9 @@ const config: HardhatUserConfig = {
     etherscan: {
       apiKey: process.env.ETHERSCAN_API_KEY_FIX,
     },
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY_FIX,
   },
   watcher: {
     compilation: {

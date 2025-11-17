@@ -57,7 +57,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
-    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.14",
     "@nomiclabs/hardhat-solhint": "^4.0.1",
     "@openzeppelin/contracts": "^5.2.0",
     "@typechain/ethers-v6": "^0.5.1",
@@ -90,6 +90,6 @@
     "wagmi": "^2.15.4"
   },
   "dependencies": {
-    "@kleros/kleros-v2-contracts": "^0.12.0"
+    "@kleros/kleros-v2-contracts": "^2.0.0-rc.1"
   }
 }

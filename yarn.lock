@@ -3202,12 +3202,12 @@ __metadata:
     "@kleros/governor-v2-eslint-config": "workspace:^"
     "@kleros/governor-v2-prettier-config": "workspace:^"
     "@kleros/governor-v2-tsconfig": "workspace:^"
-    "@kleros/kleros-v2-contracts": "npm:^0.12.0"
+    "@kleros/kleros-v2-contracts": "npm:^2.0.0-rc.1"
     "@logtail/pino": "npm:^0.4.0"
     "@nomicfoundation/hardhat-chai-matchers": "npm:^2.0.8"
     "@nomicfoundation/hardhat-ethers": "npm:^3.0.8"
     "@nomicfoundation/hardhat-network-helpers": "npm:^1.0.0"
-    "@nomicfoundation/hardhat-verify": "npm:^2.0.0"
+    "@nomicfoundation/hardhat-verify": "npm:^2.0.14"
     "@nomiclabs/hardhat-solhint": "npm:^4.0.1"
     "@openzeppelin/contracts": "npm:^5.2.0"
     "@typechain/ethers-v6": "npm:^0.5.1"
@@ -3284,24 +3284,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kleros/kleros-v2-contracts@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@kleros/kleros-v2-contracts@npm:0.12.0"
-  dependencies:
-    "@chainlink/contracts": "npm:^1.4.0"
-    "@kleros/vea-contracts": "npm:^0.6.0"
-    "@openzeppelin/contracts": "npm:^5.4.0"
-    "@shutter-network/shutter-sdk": "npm:0.0.2"
-    isomorphic-fetch: "npm:^3.0.0"
-  peerDependencies:
-    viem: ^2.24.1
-  peerDependenciesMeta:
-    viem:
-      optional: false
-  checksum: 6b06670686246bc52355a5e103b268bc4faa4e634a2b0a5a0151bf47e631317378559701cce5163c9904adac917f1c7c2d668f09b5259bb4c1d984904b471163
-  languageName: node
-  linkType: hard
-
 "@kleros/kleros-v2-contracts@npm:^0.7.0":
   version: 0.7.0
   resolution: "@kleros/kleros-v2-contracts@npm:0.7.0"
@@ -3309,6 +3291,24 @@ __metadata:
     "@kleros/vea-contracts": "npm:^0.4.0"
     viem: "npm:^2.21.35"
   checksum: 78c9762e45393eb3247755c6f9e39c8ec9020793918aca6e3fe7d970522eae91e16f9e81e653c3f05c26c375a4a5447889680cebdccedbf9a24345e74b289883
+  languageName: node
+  linkType: hard
+
+"@kleros/kleros-v2-contracts@npm:^2.0.0-rc.1":
+  version: 2.0.0-rc.1
+  resolution: "@kleros/kleros-v2-contracts@npm:2.0.0-rc.1"
+  dependencies:
+    "@chainlink/contracts": "npm:^1.4.0"
+    "@kleros/vea-contracts": "npm:^0.7.0"
+    "@openzeppelin/contracts": "npm:^5.5.0"
+    "@shutter-network/shutter-sdk": "npm:0.0.2"
+    isomorphic-fetch: "npm:^3.0.0"
+  peerDependencies:
+    viem: ^2.24.1
+  peerDependenciesMeta:
+    viem:
+      optional: false
+  checksum: abfea0e4bdae6f8cbe7901a9a934916a78aef99117580e157b20c32aad2f0b99fc1974551bc3eed3b44f9058624b2a1e8d3e1f0b1a39c19a51d9c10cc6ee5b41
   languageName: node
   linkType: hard
 
@@ -3346,10 +3346,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kleros/vea-contracts@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@kleros/vea-contracts@npm:0.6.0"
-  checksum: 1dafd94620d3392c2e00e09e7d1ca923007143f8625b4b584411a7b49404ae5630e870d3e260685964d37ccb9c4c4ab406523b8ec4dd9f89bcf6099a4f5976ec
+"@kleros/vea-contracts@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@kleros/vea-contracts@npm:0.7.0"
+  checksum: bba12886020cd4bfce39938de56edf2b56472627871ef91b10b721de655e5c20f632a8cb57679927d868375218007898b12033d769b7d33cd3f18447ca093896
   languageName: node
   linkType: hard
 
@@ -4111,9 +4111,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomicfoundation/hardhat-verify@npm:^2.0.0":
-  version: 2.0.12
-  resolution: "@nomicfoundation/hardhat-verify@npm:2.0.12"
+"@nomicfoundation/hardhat-verify@npm:^2.0.14":
+  version: 2.1.3
+  resolution: "@nomicfoundation/hardhat-verify@npm:2.1.3"
   dependencies:
     "@ethersproject/abi": "npm:^5.1.2"
     "@ethersproject/address": "npm:^5.0.2"
@@ -4125,8 +4125,8 @@ __metadata:
     table: "npm:^6.8.0"
     undici: "npm:^5.14.0"
   peerDependencies:
-    hardhat: ^2.0.4
-  checksum: ec7bdf2e5bf584abcea17a64f3da73cb792dc3af19db3a99fe0196f5314cab82b43af6984fa11233c76190049e8ab81ef0fcfcd1cd1992a4a455a65937f6b69e
+    hardhat: ^2.26.0
+  checksum: ae3f0a55edae5ffd852dca6f71f50e47cc3f9653832717fca875e181068155c9f5990aa3b1b1d11b448af9a343adc4e8a2256223ba4ddf88d07aad65887e676d
   languageName: node
   linkType: hard
 
@@ -4317,10 +4317,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openzeppelin/contracts@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "@openzeppelin/contracts@npm:5.4.0"
-  checksum: 4f7f926ebd98279ba8223cae5d2cd38e0806e60e3e3a615c9d739ffab870ffab7a1e85f47092faa123c0f26d1699ca15252adea8bcdcaf360b21781acc93b218
+"@openzeppelin/contracts@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "@openzeppelin/contracts@npm:5.5.0"
+  checksum: 5eb1a201e2e324280292077f68c8a4a2e450762798d3c990741b540b1b218c4fed143901647f8519e9abe239017bd29a455cb7e43aff25918ef110e4cdea7013
   languageName: node
   linkType: hard
 

@@ -5,15 +5,17 @@ import { Button, Card, CustomAccordion, DraggableList } from "@kleros/ui-compone
 import clsx from "clsx";
 import { useToggle } from "react-use";
 
-import { List, useLists } from "@/context/LIstsContext";
+import { List, useLists } from "@/context/NewListsContext";
 
+import ExternalLink from "@/components/ExternalLink";
 import DisplayCard from "@/components/ListDisplayCard";
 import Status from "@/components/Status";
 
 import Calendar from "@/assets/svgs/icons/calendar.svg";
 import Trash from "@/assets/svgs/icons/trash.svg";
+import TenderlyIcon from "@/assets/svgs/logos/tenderly.svg";
 
-import { formatDate } from "@/utils";
+import { formatDate, isUndefined } from "@/utils";
 import { formatETH } from "@/utils/format";
 
 import AddTxnModal from "./AddTxnModal";
@@ -25,7 +27,9 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
   const { id: listId, transactions } = list;
   const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedTxn, setSelectedTxn] = useState<List["transactions"][number] | undefined>(transactions?.[0]);
-  const { governorAddress, updateTransactions, deleteList } = useLists();
+  const { governorAddress, updateTransactions, deleteList, simulateList, isSimulating, simulations } = useLists();
+
+  const simulationShareLink = simulations.get(listId);
 
   // select the latest txn, when new txn added
   useEffect(() => {
@@ -36,6 +40,9 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
     }
   }, [transactions]);
 
+  const simulate = () => {
+    simulateList(listId);
+  };
   return (
     <div className="w-full pt-2 lg:px-6 flex flex-col justify-end items-end">
       <Button
@@ -77,6 +84,33 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
             <Button text="Add tx" variant="secondary" small onPress={toggleIsOpen} />
             <SubmissionButton {...{ governorAddress, list }} />
           </div>
+          {transactions.length > 0 ? (
+            <div
+              className={clsx(
+                "w-full px-6 pt-4 gap-4",
+                "flex flex-wrap items-center ",
+                "border-t border-t-klerosUIComponentsStroke",
+                isUndefined(simulationShareLink) ? "justify-end" : "justify-between"
+              )}
+            >
+              {simulationShareLink ? (
+                <ExternalLink
+                  url={simulationShareLink}
+                  text="Inspect on Tenderly"
+                  className="text-klerosUIComponentsPrimaryBlue"
+                />
+              ) : null}
+              <Button
+                small
+                text="Simulate"
+                variant="secondary"
+                onPress={simulate}
+                isDisabled={isSimulating}
+                isLoading={isSimulating}
+                icon={<TenderlyIcon className="size-4 mr-2 ml" />}
+              />
+            </div>
+          ) : null}
         </Card>
         <div className="flex flex-col gap-2.5 md:gap-4">
           <DisplayCard label="Contract Address" value={selectedTxn?.to ?? ""} />
@@ -85,7 +119,7 @@ const AccordionBody: React.FC<IAccordionBody> = ({ list }) => {
           <DisplayCard label="Decoded Input" value={selectedTxn?.decodedInput ?? ""} />
         </div>
 
-        <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} />
+        {isOpen ? <AddTxnModal {...{ isOpen, toggleIsOpen, listId }} /> : null}
       </div>
     </div>
   );

@@ -3312,9 +3312,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kleros/ui-components-library@npm:^3.4.5":
-  version: 3.4.5
-  resolution: "@kleros/ui-components-library@npm:3.4.5"
+"@kleros/ui-components-library@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "@kleros/ui-components-library@npm:3.6.0"
   dependencies:
     "@internationalized/date": "npm:^3.7.0"
     bignumber.js: "npm:^9.1.2"
@@ -3335,7 +3335,7 @@ __metadata:
     react-dom: ^18.0.0
     react-is: ^18.0.0
     tailwindcss: ^4.0.11
-  checksum: f7e3aeeb91397a6b7afefae49cb05d603634031b5e729f6901b605bfd19a4824b321623ce67ee9a0deba8fdde492f5c9a4e50aedc162682ebd452733b0404e38
+  checksum: c95a5ec083396de0e3bee520e95a1921cc4ca0f4ff6e6c8e035c4c59919a84d75aa961bd62afad7d7ac35a989e641f7d0b8065545d77e64fdefc8b01f88e67a0
   languageName: node
   linkType: hard
 
@@ -21645,7 +21645,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3"
     "@kleros/governor-v2-eslint-config": "workspace:^"
     "@kleros/kleros-v2-contracts": "npm:^0.7.0"
-    "@kleros/ui-components-library": "npm:^3.4.5"
+    "@kleros/ui-components-library": "npm:^3.6.0"
     "@next/eslint-plugin-next": "npm:^15.2.4"
     "@reown/appkit": "npm:^1.7.7"
     "@reown/appkit-adapter-wagmi": "npm:^1.7.7"

@@ -15,7 +15,7 @@
   "prettier": "@kleros/governor-v2-prettier-config",
   "dependencies": {
     "@kleros/kleros-v2-contracts": "^0.7.0",
-    "@kleros/ui-components-library": "^3.4.5",
+    "@kleros/ui-components-library": "^3.6.0",
     "@reown/appkit": "^1.7.7",
     "@reown/appkit-adapter-wagmi": "^1.7.7",
     "@tailwindcss/postcss": "^4.1.7",

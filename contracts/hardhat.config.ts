@@ -132,7 +132,7 @@ const config: HardhatUserConfig = {
       tags: ["production", "foreign", "layer1"],
       verify: {
         etherscan: {
-          apiKey: process.env.GNOSISSCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },

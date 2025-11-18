@@ -70,7 +70,7 @@ contract KlerosGovernor is IArbitrableV2 {
     Submission[] public submissions; // Stores all created transaction lists. submissions[_listID].
     Session[] public sessions; // Stores all submitting sessions. sessions[_session].
     mapping(uint256 sessionIndex => mapping(bytes32 listHash => bool)) alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[listHash].
-
+    mapping(uint256 disputeID => uint256 sessionIndex) public arbitratorDisputeIDToSessionIndex; // Maps core arbitrator's dispute ID to session index.
     // ************************************* //
     // *        Function Modifiers         * //
     // ************************************* //
@@ -254,7 +254,7 @@ contract KlerosGovernor is IArbitrableV2 {
             currentTxHash = keccak256(abi.encodePacked(transaction.target, transaction.value, transaction.data));
             listHash = keccak256(abi.encodePacked(currentTxHash, listHash));
         }
-        if (!alreadySubmitted[sessions.length - 1][listHash]) revert ListAlreadySubmitted();
+        if (alreadySubmitted[sessions.length - 1][listHash]) revert ListAlreadySubmitted();
         alreadySubmitted[sessions.length - 1][listHash] = true;
         submission.listHash = listHash;
         submission.submissionTime = block.timestamp;
@@ -318,6 +318,7 @@ contract KlerosGovernor is IArbitrableV2 {
                 session.submittedLists.length,
                 arbitratorExtraData
             );
+            arbitratorDisputeIDToSessionIndex[session.disputeID] = sessions.length - 1;
             // Check in case arbitration cost increased after the submission. It's unlikely that its increase won't be covered by the base deposit, but technically possible.
             session.sumDeposit = session.sumDeposit > arbitrationCost ? session.sumDeposit - arbitrationCost : 0;
             reservedETH = reservedETH > arbitrationCost ? reservedETH - arbitrationCost : 0;

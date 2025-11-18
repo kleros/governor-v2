@@ -3,7 +3,7 @@
 import { useMemo, useRef } from "react";
 
 import clsx from "clsx";
-import { useHoverDirty, useToggle } from "react-use";
+import { useHoverDirty } from "react-use";
 import { Address } from "viem";
 
 import { Submission } from "@/hooks/useFetchSubmittedLists";
@@ -16,16 +16,14 @@ import Search from "@/assets/svgs/icons/search.svg";
 
 import { formatDate } from "@/utils";
 
-import ExamineModal from "./ExamineModal";
-
 interface IListCard {
   list: Submission;
   governorAddress: Address;
+  setIsOpen: (list: Submission) => void;
 }
-const ListCard: React.FC<IListCard> = ({ list, governorAddress }) => {
+const ListCard: React.FC<IListCard> = ({ list, setIsOpen }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const isHovered = useHoverDirty(cardRef);
-  const [isOpen, toggleIsOpen] = useToggle(false);
 
   const status = useMemo(() => {
     if (list.txs.length > 0 && list.txs.every((tx) => tx.executed)) return ListStatus.Executed;
@@ -67,13 +65,12 @@ const ListCard: React.FC<IListCard> = ({ list, governorAddress }) => {
             "flex items-center justify-center gap-2 flex-col",
             "animate-fade-in !duration-100"
           )}
-          onClick={toggleIsOpen}
+          onClick={() => setIsOpen(list)}
         >
           <Search className="size-8" />
           <p className="text-base text-klerosUIComponentsSecondaryBlue">Examine</p>
         </div>
       ) : null}
-      <ExamineModal {...{ isOpen, toggleIsOpen, list, governorAddress }} />
     </div>
   );
 };

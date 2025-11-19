@@ -10,13 +10,15 @@ const extraData =
   "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  const { deployments, getNamedAccounts, getChainId, ethers } = hre;
+  const { deployments, getNamedAccounts, getChainId, ethers, network } = hre;
   const { deploy } = deployments;
 
   // fallback to hardhat node signers on local network
   const deployer = (await getNamedAccounts()).deployer ?? (await hre.ethers.getSigners())[0].address;
   const chainId = Number(await getChainId());
   console.log("deploying to %s with deployer %s", HomeChains[chainId], deployer);
+
+  const wNative = await ethers.getContract("WETH");
 
   const { disputeTemplateRegistry, klerosCore } = await getArbitratorContracts(hre);
   const disputeTemplate = templateFn(klerosCore.target.toString(), chainId);
@@ -26,7 +28,21 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     log: true,
   });
 
-  const governorFactory = (await ethers.getContract("GovernorFactory")) as GovernorFactory;
+  const governorFactory = await ethers.getContract<GovernorFactory>("GovernorFactory");
+
+  const gfArgs = [
+    klerosCore.target,
+    extraData,
+    disputeTemplateRegistry.target,
+    disputeTemplate,
+    dataMappings,
+    0,
+    600,
+    600,
+    600, // feeTimeout: 10 minutes
+    wNative.target,
+  ];
+
   await governorFactory.deploy(
     klerosCore.target,
     extraData,
@@ -36,22 +52,14 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     0,
     600,
     600,
-    600 // feeTimeout: 10 minutes
+    600, // feeTimeout: 10 minutes,
+    wNative.target
   );
 
+  const kgArgs = gfArgs;
   await deploy("KlerosGovernor", {
     from: deployer,
-    args: [
-      klerosCore.target,
-      extraData,
-      disputeTemplateRegistry.target,
-      disputeTemplate,
-      dataMappings,
-      0,
-      600,
-      600,
-      600, // feeTimeout: 10 minutes
-    ],
+    args: kgArgs,
     log: true,
   });
 };

@@ -5,7 +5,7 @@ import { KlerosGovernor } from "../../typechain-types";
 const NETWORK_TO_DEPLOYMENT: Record<string, DeploymentName> = {
   arbitrumSepoliaDevnet: "devnet",
   arbitrumSepolia: "testnet",
-  arbitrum: "mainnetNeo",
+  arbitrum: "mainnet",
 } as const;
 
 export const getArbitratorContracts = async (hre: HardhatRuntimeEnvironment) => {

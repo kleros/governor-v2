@@ -27,8 +27,11 @@ const ActiveLists: React.FC<{ governorAddress: Address }> = ({ governorAddress }
   useEffect(() => {
     // Open the list automatically if specified in params
     if (!isUndefined(listId) && !isUndefined(lists)) {
-      const match = lists.find((l) => l.listId === BigInt(listId));
-      if (match) setOpenList({ ...match });
+      try {
+        const parsedListId = BigInt(listId);
+        const match = lists.find((l) => l.listId === parsedListId);
+        if (match) setOpenList({ ...match });
+      } catch {}
     }
   }, [listId, lists]);
 

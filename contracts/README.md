@@ -75,8 +75,7 @@ The following env vars are required:
 The ones below are optional:
 
 - `ETHERSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Etherscan**.
-- `ARBISCAN_API_KEY`: to verify the source of the newly deployed contracts on **Arbitrum**.
-- `GNOSISSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Gnosis chain**.
+- `ETHERSCAN_API_KEY_FIX`: to verify the source of the newly deployed contracts on **Etherscan**.
 
 #### 1. Deploy to a Local Network
 
@@ -91,7 +90,7 @@ yarn hardhat node --tags nothing
 **Shell 2: the deploy script**
 
 ```bash
-yarn deploy --network localhost --tags GovernorV2
+yarn deploy --network localhost --tags KlerosGovernor
 ```
 
 #### 2. Deploy to a Public Network Fork
@@ -115,7 +114,7 @@ yarn deploy-testnet-fork
 #### 3. Deploy to Public Testnets
 
 ```bash
-yarn deploy --network arbitrumSepolia --tags GovernorV2
+yarn deploy --network arbitrumSepolia --tags KlerosGovernor
 ```
 
 The deployed addresses should be displayed to the screen after the deployment is complete. If you missed them, you can always go to the `deployments/<network>` directory and look for the respective file.
@@ -129,7 +128,7 @@ Same steps as above but append `Devnet` to the `--network` parameter.
 **Shell 1: the node**
 
 ```bash
-yarn hardhat node --tags GovernorV2
+yarn hardhat node --tags KlerosGovernor
 ```
 
 **Shell 2: the test scripts**

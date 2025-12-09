@@ -2,7 +2,6 @@
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-chai-matchers";
-import "@nomicfoundation/hardhat-verify";
 import "@nomiclabs/hardhat-solhint";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
@@ -13,7 +12,6 @@ import "hardhat-watcher";
 import "hardhat-docgen";
 // import "hardhat-contract-sizer"; // prevents hardhat-deploy from finding chalk...
 // import "hardhat-tracer"; // prevents hardhat-deploy from finding chalk...
-import "./tasks/verify-all";
 
 dotenv.config();
 
@@ -149,9 +147,6 @@ const config: HardhatUserConfig = {
     etherscan: {
       apiKey: process.env.ETHERSCAN_API_KEY_FIX,
     },
-  },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY_FIX,
   },
   watcher: {
     compilation: {

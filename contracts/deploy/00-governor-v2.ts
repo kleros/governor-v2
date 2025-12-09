@@ -10,7 +10,7 @@ const extraData =
   "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  const { deployments, getNamedAccounts, getChainId, ethers, network } = hre;
+  const { deployments, getNamedAccounts, getChainId, ethers } = hre;
   const { deploy } = deployments;
 
   // fallback to hardhat node signers on local network

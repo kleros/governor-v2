@@ -5,9 +5,9 @@ import { getArbitratorContracts } from "./utils/getContracts";
 import { GovernorFactory } from "../typechain-types";
 import { dataMappings, templateFn } from "./utils/disputeTemplate";
 
-// General court, 3 jurors
+// General court, 3 jurors, classic dispute kit
 const extraData =
-  "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
+  "0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001";
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, getNamedAccounts, getChainId, ethers } = hre;

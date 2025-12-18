@@ -17,7 +17,7 @@ Refresh the list of deployed contracts by running `./scripts/generateDeployments
 #### Arbitrum Sepolia
 
 - [GovernorFactory](https://sepolia.arbiscan.io/address/0xb98AEdAa01D0e821278d68f2A2A13FbdB2d81A33)
-- [KlerosGovernor](https://sepolia.arbiscan.io/address/0x52e6766e6C4fB05Caec92e5318668b3E366D649a)
+- [KlerosGovernor](https://sepolia.arbiscan.io/address/0x6Bf62e6bBCE8c09d916189680F411E5DD0DAd004)
 - [WETH](https://sepolia.arbiscan.io/address/0x3829A2486d53ee984a0ca2D76552715726b77138)
 
 #### Sepolia

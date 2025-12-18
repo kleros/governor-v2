@@ -19,7 +19,7 @@ export type Governor = {
 export const governors: Governor[] = [
   {
     name: "Kleros V2",
-    address: "0x52e6766e6C4fB05Caec92e5318668b3E366D649a",
+    address: "0x6Bf62e6bBCE8c09d916189680F411E5DD0DAd004",
     Logo: KlerosLogo,
     chain: arbitrumSepolia,
     ChainIcon: ETH,
@@ -27,7 +27,7 @@ export const governors: Governor[] = [
   },
   {
     name: "Kleros V2",
-    address: "0x52e6766e6C4fB05Caec92e5318668b3E366D649a",
+    address: "0x6Bf62e6bBCE8c09d916189680F411E5DD0DAd004",
     Logo: KlerosLogo,
     chain: gnosis,
     ChainIcon: Gnosis,
@@ -35,7 +35,7 @@ export const governors: Governor[] = [
   },
   {
     name: "Proof of Humanity  V1",
-    address: "0x52e6766e6C4fB05Caec92e5318668b3E366D649a",
+    address: "0x6Bf62e6bBCE8c09d916189680F411E5DD0DAd004",
     Logo: PohLogo,
     chain: mainnet,
     ChainIcon: ETH,

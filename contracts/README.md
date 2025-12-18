@@ -137,7 +137,7 @@ yarn hardhat node --tags KlerosGovernor
 yarn test --network localhost
 ```
 
-#### 4. Verify the Source Code
+#### 5. Verify the Source Code
 
 This must be done for each network separately.
 

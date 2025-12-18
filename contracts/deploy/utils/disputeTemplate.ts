@@ -2,7 +2,7 @@
 export const templateFn = (arbitratorAddress: string, arbitrableChainID: number) => `{
   "$schema": "../NewDisputeTemplate.schema.json",
   "title": "Execute a transaction list in Kleros Governor",
-  "description": "Multiple transaction lists were submitted in Kleros Governor session {{externalDisputeID}}, please vote for which list transaction list should be executed.",
+  "description": "Multiple transaction lists were submitted in Kleros Governor session {{sessionIndex}}, please vote for which list transaction list should be executed.\\n\\nBelow are the available lists:\\n\\n{{#listIds}}- **List {{.}}** → [View Transactions](https://governor-v2.kleros.builders/governor/{{arbitrableAddress}}?listId={{.}})\\n{{/listIds}}",
   "question": "Which transaction list should be executed?",
    "answers": [
       {{#listIds}}
@@ -33,11 +33,26 @@ export const dataMappings = `
 [
   {
     "type": "abi/call",
+    "abi": "function arbitratorDisputeIDToSessionIndex(uint256) view returns (uint256)",
+    "address": "{{{arbitrableAddress}}}",
+    "functionName": "arbitratorDisputeIDToSessionIndex",
+    "args": [
+      "{{{arbitratorDisputeID}}}"
+    ],
+    "seek": [
+    "value"
+    ],
+    "populate": [
+      "sessionIndex"
+    ]
+  },
+  {
+    "type": "abi/call",
     "abi": "function getSession(uint256) view returns ((uint256 , uint256 , uint256[] , uint256 , uint8 , uint256 ))",
     "address": "{{{arbitrableAddress}}}",
     "functionName": "getSession",
     "args": [
-      "{{{externalDisputeID}}}"
+      "{{{sessionIndex}}}"
     ],
     "seek": [
     "2"

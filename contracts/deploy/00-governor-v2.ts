@@ -5,9 +5,9 @@ import { getArbitratorContracts } from "./utils/getContracts";
 import { GovernorFactory } from "../typechain-types";
 import { dataMappings, templateFn } from "./utils/disputeTemplate";
 
-// General court, 3 jurors
+// General court, 3 jurors, classic dispute kit
 const extraData =
-  "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
+  "0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001";
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, getNamedAccounts, getChainId, ethers } = hre;
@@ -18,6 +18,8 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const chainId = Number(await getChainId());
   console.log("deploying to %s with deployer %s", HomeChains[chainId], deployer);
 
+  const wNative = await ethers.getContract("WETH");
+
   const { disputeTemplateRegistry, klerosCore } = await getArbitratorContracts(hre);
   const disputeTemplate = templateFn(klerosCore.target.toString(), chainId);
 
@@ -26,7 +28,21 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     log: true,
   });
 
-  const governorFactory = (await ethers.getContract("GovernorFactory")) as GovernorFactory;
+  const governorFactory = await ethers.getContract<GovernorFactory>("GovernorFactory");
+
+  const gfArgs = [
+    klerosCore.target,
+    extraData,
+    disputeTemplateRegistry.target,
+    disputeTemplate,
+    dataMappings,
+    0,
+    600,
+    600,
+    600, // feeTimeout: 10 minutes
+    wNative.target,
+  ];
+
   await governorFactory.deploy(
     klerosCore.target,
     extraData,
@@ -36,22 +52,14 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     0,
     600,
     600,
-    600 // feeTimeout: 10 minutes
+    600, // feeTimeout: 10 minutes,
+    wNative.target
   );
 
+  const kgArgs = gfArgs;
   await deploy("KlerosGovernor", {
     from: deployer,
-    args: [
-      klerosCore.target,
-      extraData,
-      disputeTemplateRegistry.target,
-      disputeTemplate,
-      dataMappings,
-      0,
-      600,
-      600,
-      600, // feeTimeout: 10 minutes
-    ],
+    args: kgArgs,
     log: true,
   });
 };

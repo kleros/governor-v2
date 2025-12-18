@@ -3,7 +3,9 @@
 pragma solidity 0.8.24;
 
 import {IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
-import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
+import {
+    IDisputeTemplateRegistry
+} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
 import {KlerosGovernor} from "./KlerosGovernor.sol";
 
 /// @title GovernorFactory
@@ -37,6 +39,7 @@ contract GovernorFactory {
     /// @param _submissionTimeout Time in seconds allocated for submitting transaction list.
     /// @param _executionTimeout Time in seconds after approval that allows to execute transactions of the approved list.
     /// @param _withdrawTimeout Time in seconds after submission that allows to withdraw submitted list.
+    /// @param _wNative The wrapped native token address, typically wETH.
     function deploy(
         IArbitratorV2 _arbitrator,
         bytes memory _arbitratorExtraData,
@@ -46,7 +49,8 @@ contract GovernorFactory {
         uint256 _submissionBaseDeposit,
         uint256 _submissionTimeout,
         uint256 _executionTimeout,
-        uint256 _withdrawTimeout
+        uint256 _withdrawTimeout,
+        address _wNative
     ) public {
         KlerosGovernor instance = new KlerosGovernor(
             _arbitrator,
@@ -57,7 +61,8 @@ contract GovernorFactory {
             _submissionBaseDeposit,
             _submissionTimeout,
             _executionTimeout,
-            _withdrawTimeout
+            _withdrawTimeout,
+            _wNative
         );
         instances.push(instance);
         emit NewGovernor(instance);

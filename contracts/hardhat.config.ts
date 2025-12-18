@@ -65,8 +65,7 @@ const config: HardhatUserConfig = {
       tags: ["staging", "home", "layer2"],
       verify: {
         etherscan: {
-          apiUrl: "https://api-sepolia.arbiscan.io",
-          apiKey: process.env.ARBISCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },
@@ -79,8 +78,7 @@ const config: HardhatUserConfig = {
       tags: ["staging", "home", "layer2"],
       verify: {
         etherscan: {
-          apiUrl: "https://api-sepolia.arbiscan.io",
-          apiKey: process.env.ARBISCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },
@@ -93,7 +91,7 @@ const config: HardhatUserConfig = {
       tags: ["production", "home", "layer2"],
       verify: {
         etherscan: {
-          apiKey: process.env.ARBISCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },
@@ -131,7 +129,7 @@ const config: HardhatUserConfig = {
       tags: ["production", "foreign", "layer1"],
       verify: {
         etherscan: {
-          apiKey: process.env.GNOSISSCAN_API_KEY,
+          apiKey: process.env.ETHERSCAN_API_KEY,
         },
       },
     },

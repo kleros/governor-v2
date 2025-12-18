@@ -6,7 +6,21 @@ Smart contracts for GovernorV2
 
 Refresh the list of deployed contracts by running `./scripts/generateDeploymentsMarkdown.sh` or `./scripts/populateReadme.sh`.
 
-$deployments
+### Official Testnet
+
+#### Arbitrum Sepolia
+
+#### Sepolia
+
+### Devnet
+
+#### Arbitrum Sepolia
+
+- [GovernorFactory](https://sepolia.arbiscan.io/address/0xb98AEdAa01D0e821278d68f2A2A13FbdB2d81A33)
+- [KlerosGovernor](https://sepolia.arbiscan.io/address/0x6Bf62e6bBCE8c09d916189680F411E5DD0DAd004)
+- [WETH](https://sepolia.arbiscan.io/address/0x3829A2486d53ee984a0ca2D76552715726b77138)
+
+#### Sepolia
 
 ## Getting Started
 
@@ -62,7 +76,6 @@ The ones below are optional:
 
 - `ETHERSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Etherscan**.
 - `ETHERSCAN_API_KEY_FIX`: to verify the source of the newly deployed contracts on **Etherscan**.
-
 
 #### 1. Deploy to a Local Network
 

@@ -33,12 +33,15 @@ export async function wrapWithToast(
   try {
     const hash = await contractWrite();
 
-    // Use viem's built-in timeout option.
-    const res: TransactionReceipt = await publicClient.waitForTransactionReceipt({
-      hash,
-      confirmations: 2,
-      timeout: TX_RECEIPT_TIMEOUT_MS,
+    // Wrap waitForTransactionReceipt in Promise.race with a timeout promise
+    const receiptPromise = publicClient.waitForTransactionReceipt({ hash, confirmations: 2 });
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Transaction timed out after 5 minutes."));
+      }, TX_RECEIPT_TIMEOUT_MS);
     });
+
+    const res: TransactionReceipt = await Promise.race([receiptPromise, timeoutPromise]);
 
     const status = res.status === "success";
     if (status) successToast("Transaction mined!");
@@ -46,11 +49,10 @@ export async function wrapWithToast(
 
     return { status, result: res };
   } catch (error: any) {
-    // If Viem exposes a dedicated TimeoutError, prefer that.
-    // Otherwise, check error message as fallback.
-    if (error?.name === "TimeoutError" || error?.message?.toLowerCase().includes("timed out")) {
+    if (error?.message?.toLowerCase().includes("timed out")) {
       errorToast(
-        "Transaction is taking longer than expected. It may still confirm. Please check the transaction status on the blockchain explorer."
+        "Transaction is taking longer than expected. It may still confirm. " +
+          "Please check the transaction status on the blockchain explorer."
       );
     } else {
       const msg = parseWagmiError(error) || "Something went wrong. Please try again.";

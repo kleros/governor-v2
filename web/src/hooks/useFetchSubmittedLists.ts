@@ -46,43 +46,68 @@ export const useFetchSubmittedLists = (governorAddress: Address, previousSession
     queryFn: async () => {
       if (isUndefined(publicClient) || isUndefined(session)) return null;
 
-      const listsPromises = session.submittedLists.map(async (listId) => {
-        const data = await publicClient.readContract({
-          address: governorAddress,
-          abi: klerosGovernorAbi,
-          functionName: "getSubmission",
-          args: [listId],
-        });
+      if (!session.submittedLists || session.submittedLists.length === 0) {
+        return [];
+      }
 
-        const logs = await publicClient.getContractEvents({
-          address: governorAddress,
-          abi: klerosGovernorAbi,
-          eventName: "ListSubmitted",
-          toBlock: data.submissionBlock,
-          fromBlock: data.submissionBlock,
-          args: {
-            // This ensures we don't pick up the wrong event, in case multiple lists were submitted in same block;
-            _listID: listId,
-          },
-          strict: true,
-        });
+      // Batch contract calls using multicall for better performance
+      // This reduces network latency from N calls to 1 call
+      const submissionCalls = session.submittedLists.map((listId) => ({
+        address: governorAddress,
+        abi: klerosGovernorAbi,
+        functionName: "getSubmission" as const,
+        args: [listId] as const,
+      }));
 
-        // should only be one
-        const log = logs?.[0];
-        let titles: string[] = [];
+      // Execute all getSubmission calls in a single multicall
+      const submissionResults = await publicClient.multicall({ contracts: submissionCalls });
 
-        if (!isUndefined(log)) {
-          titles = log.args._description.split(",");
-        }
+      // Process results and fetch additional data for each submission
+      const processedResults: (Submission | null)[] = await Promise.all(
+        submissionResults.map(async (result, index) => {
+          const listId = session.submittedLists[index];
 
-        const updatedTxs: SubmissionTxn[] = data.txs.map((tx, i) => ({
-          ...tx,
-          description: titles?.[i] ?? "",
-        }));
+          // Handle potential multicall failures
+          if (result.status === "failure") {
+            console.error(`Failed to fetch submission for listId ${listId}:`, result.error);
+            return null;
+          }
 
-        return { ...data, txs: updatedTxs, listId };
-      });
-      return await Promise.all(listsPromises);
+          const data = result.result;
+
+          // Fetch logs for description (this remains individual as it's not a simple read)
+          const logs = await publicClient.getContractEvents({
+            address: governorAddress,
+            abi: klerosGovernorAbi,
+            eventName: "ListSubmitted",
+            toBlock: data.submissionBlock,
+            fromBlock: data.submissionBlock,
+            args: {
+              // This ensures we don't pick up the wrong event, in case multiple lists were submitted in same block;
+              _listID: listId,
+            },
+            strict: true,
+          });
+
+          // should only be one
+          const log = logs?.[0];
+          let titles: string[] = [];
+
+          if (!isUndefined(log)) {
+            titles = log.args._description.split(",");
+          }
+
+          const updatedTxs: readonly SubmissionTxn[] = data.txs.map((tx, i) => ({
+            ...tx,
+            description: titles?.[i] ?? "",
+          }));
+
+          return { ...data, txs: updatedTxs, listId } as Submission;
+        })
+      );
+
+      // Filter out any failed results and return as Submission[]
+      return processedResults.filter((result): result is Submission => result !== null);
     },
   });
 };

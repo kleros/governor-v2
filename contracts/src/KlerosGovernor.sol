@@ -61,7 +61,7 @@ contract KlerosGovernor is IArbitrableV2 {
 
     Submission[] public submissions; // Stores all created transaction lists. submissions[_listID].
     Session[] public sessions; // Stores all submitting sessions. sessions[_session].
-    mapping(uint256 sessionIndex => mapping(bytes32 listHash => bool)) alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[listHash].
+    mapping(uint256 sessionIndex => mapping(bytes32 listHash => bool)) public alreadySubmitted; // Indicates whether or not the transaction list was already submitted in order to catch duplicates in the form alreadySubmitted[sessionIndex][listHash].
     // ************************************* //
     // *        Function Modifiers         * //
     // ************************************* //
@@ -423,14 +423,14 @@ contract KlerosGovernor is IArbitrableV2 {
     }
 
     /// @dev Gets the session from the session index.
-    /// @return _session The session info.
-    function getSession(uint256 _sessionIndex) external view returns (Session memory _session) {
-        _session = sessions[_sessionIndex];
+    /// @return session The session info.
+    function getSession(uint256 _sessionIndex) external view returns (Session memory session) {
+        session = sessions[_sessionIndex];
     }
 
     /// @dev Gets the total deposit required to submit a list. (submissionBaseDeposit + arbitrationCost).
-    /// @return _requiredDeposit required deposit value
-    function getTotalSubmissionDeposit() external view returns (uint256 _requiredDeposit) {
-        _requiredDeposit = submissionBaseDeposit + arbitrator.arbitrationCost(arbitratorExtraData);
+    /// @return requiredDeposit required deposit value
+    function getTotalSubmissionDeposit() external view returns (uint256 requiredDeposit) {
+        requiredDeposit = submissionBaseDeposit + arbitrator.arbitrationCost(arbitratorExtraData);
     }
 }

@@ -98,7 +98,7 @@ contract ArbitratorMock is IArbitratorV2 {
 
     function currentRuling(
         uint256 /*_disputeID*/
-    ) public pure returns (uint256 /*ruling*/, bool /*tied*/, bool /*overridden*/) {
+    ) public pure override returns (uint256 /*ruling*/, bool /*tied*/, bool /*overridden*/) {
         revert("Not supported");
     }
 }

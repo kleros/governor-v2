@@ -10,7 +10,7 @@
   "prettier.useEditorConfig": true,
   "prettier.configPath": "prettier-config/.prettierrc.js",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.fixAll.eslint": true
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
   }
 }

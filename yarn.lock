@@ -8381,10 +8381,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zksync/contracts@github:matter-labs/era-contracts#446d391d34bdb48255d5f8fef8a8248925fc98b9":
-  version: 0.1.0
-  resolution: "@zksync/contracts@https://github.com/matter-labs/era-contracts.git#commit=446d391d34bdb48255d5f8fef8a8248925fc98b9"
-  checksum: df60ff788bd93b454e32647896160ba1ab057a84b23b3b19f5697764ad300d7b5966ff32e1c5cdd82e16284cc3a2e787099e551988831952c4b8c12b70a83cd8
+"@zksync/contracts@npm:empty-npm-package@1.0.0":
+  version: 1.0.0
+  resolution: "empty-npm-package@npm:1.0.0"
+  checksum: 745b1e85c1c3f42d5960fc5729e6ad6114a41af9425a673b1f3493c0fb431273d48e30170bcfaf8141feca15f95ca141c8237aefee8ee84fd34586f06ee62368
   languageName: node
   linkType: hard
 

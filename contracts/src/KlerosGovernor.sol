@@ -134,6 +134,7 @@ contract KlerosGovernor is IArbitrableV2 {
         executionTimeout = _executionTimeout;
         withdrawTimeout = _withdrawTimeout;
         sessions.push();
+        // Pre-emptively create an empty element so the submission count starts with 1, to avoid collision with "0" ruling on the UI level.
         submissions.push();
 
         templateRegistry = _templateRegistry;

@@ -47,6 +47,7 @@
     "buffer": "buffer"
   },
   "resolutions": {
-    "@types/react": "18.3.0"
+    "@types/react": "18.3.0",
+    "@zksync/contracts": "npm:empty-npm-package@1.0.0"
   }
 }

@@ -34,7 +34,7 @@ const ITEMS = [
   {
     text: "FAQ",
     Icon: Faq,
-    url: "https://docs.kleros.io/kleros-faq",
+    url: "https://docs.kleros.io/welcome/faq",
   },
 ];
 
